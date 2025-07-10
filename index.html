@@ -65,9 +65,34 @@
 
     const base64CV = "[BASE64_STRING_HERE]";
 
+    const whoisRobert = `
+  ██████╗ ██████╗ ██████╗ ██████╗ ███████╗████████╗     ██████╗  ██████╗ ██████╗ 
+ ██╔════╝██╔═══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝    ██╔════╝ ██╔═══██╗██╔══██╗
+ ██║     ██║   ██║██████╔╝██║  ██║█████╗     ██║       ██║  ███╗██║   ██║██████╔╝
+ ██║     ██║   ██║██╔═══╝ ██║  ██║██╔══╝     ██║       ██║   ██║██║   ██║██╔═══╝ 
+ ╚██████╗╚██████╔╝██║     ██████╔╝███████╗   ██║       ╚██████╔╝╚██████╔╝██║     
+  ╚═════╝ ╚═════╝ ╚═╝     ╚═════╝ ╚══════╝   ╚═╝        ╚═════╝  ╚═════╝ ╚═╝     
+
+Robert Lorence — rlorence2015@gmail.com
+https://github.com/bluerl27
+
+Robert is a roboticist and signal processing engineer passionate about real-time embedded systems, bat-inspired sonar, and MEMS antenna design. His work integrates hardware and software to explore autonomous perception and navigation.
+
+Education:
+- M.S. Electrical Engineering, Virginia Tech
+
+Projects:
+- Real-time ultrasonic microphone array
+- MEMS-based reconfigurable antennas
+- Bat-inspired sonar robot for jungle navigation
+
+More at: bluerl27.github.io
+`;
+
     const commands = {
-      "help": "Try commands like whoami, ls, cd resume, cat cv, echo $GOALS, contact, apply, download, clear",
+      "help": "Try commands like whoami, ls, cd resume, cat cv, echo $GOALS, contact, apply, download, clear, whois",
       "whoami": "Robert Lorence\nRobotics Engineer | Signal Processing | Real-Time Systems",
+      "whois": args => args[0] === "robert" ? whoisRobert : `No such user '${args[0]}'`,
       "ls": "resume  projects  contact.sh",
       "cd": args => {
         if (args[0] === "resume") return "Now in ~/resume";
