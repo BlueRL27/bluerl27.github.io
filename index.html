@@ -94,15 +94,7 @@
 I'm an engineer and entrepreneur with Master’s degrees in Electrical Engineering and Business Analytics, and a BA in Economics from Virginia Tech. My background spans hands-on robotics, embedded systems, and large-scale infrastructure. I recently developed sonar-based autonomous navigation platforms in the Brunei rainforest, co-creating the first public bat echolocation dataset for the country. Before that, I spent six years at IBM leading large government and healthcare tech projects, and I’ve also founded a travel-tech startup and worked on HIL grid testing at Monash University. What excites me about Root Ventures is your belief in backing bold engineering at the frontier, not just funding it, but building alongside it. I’d love to contribute that same mindset to your team.`;
 });
 
-      terminalInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          const value = terminalInput.textContent;
-          commandHistory.unshift(value);
-          historyIndex = -1;
-          runCommand(value);
-          inputLine.remove();
-          function runCommand(command) {
+      function runCommand(command) {
   printLine(prompt + command);
   switch (command.trim()) {
     case "help":
@@ -142,7 +134,15 @@ Tagline: “It’s like talking to your future self. From 3 a.m.”`);
   }
 }
 
-createInputLine();
+terminalInput.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const value = terminalInput.textContent;
+          commandHistory.unshift(value);
+          historyIndex = -1;
+          runCommand(value);
+          inputLine.remove();
+          createInputLine();
         } else if (e.key === "ArrowUp") {
           if (commandHistory.length > 0) {
             historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
