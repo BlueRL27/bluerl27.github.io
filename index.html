@@ -29,6 +29,11 @@
       min-width: 1px;
       white-space: pre;
       caret-color: transparent;
+      outline: none;
+      border: none;
+    }
+    .terminal-input:focus {
+      outline: none;
     }
     .blinking-box {
       display: inline-block;
@@ -87,7 +92,6 @@ https://github.com/bluerl27
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&(///(#(,,*%%#&/*#&&@@@@@@@@@@@@@@@@&&%////
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##((#&*,(%(###&&&&&&&&@@@@@@@@@@@@@@&@(/((
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&((/&**((/(#((&&&&&&&&&&&&@@@@@@@@@@@@(((
-
 
 Roboticist and signal processing engineer focused on real-time embedded systems, bat-inspired sonar, and MEMS antenna design. Building systems that mimic biology and sense the world.
 
@@ -156,7 +160,7 @@ Selected Projects:
       terminalInput.focus();
 
       terminalInput.addEventListener("input", () => {
-        const inputWidth = terminalInput.textContent.length * 8; // approximate width
+        const inputWidth = terminalInput.getBoundingClientRect().width;
         cursorBox.style.transform = `translateX(${inputWidth}px)`;
       });
 
