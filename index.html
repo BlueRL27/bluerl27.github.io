@@ -153,6 +153,9 @@ I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering
           printLine("  whoami       - Learn more about me");
           printLine("  launch       - View some quirky startup ideas");
           printLine("  download     - Download my CV");
+          printLine("  git this repo - View the project repository");
+          printLine("  other        - Try some other commands to see what happens");
+          printLine("  base64       - View a base64-encoded snippet of my CV");
           break;
         case "whoami":
           printLine(whoamiOutput);
@@ -178,6 +181,21 @@ Tagline: “It’s like talking to your future self. From 3 a.m.”`);
         case "download":
           printLine("📎 Download my CV here:");
           printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
+          break;
+        case "git this repo":
+          printLine("📁 Clone or view the repository here:");
+          printLine("https://github.com/bluerl27/robertlorence.github.io");
+          break;
+        case "base64":
+          printLine("Here’s a Base64 preview of my CV (simulated):");
+          printLine("");
+          printLine("JVBERi0xLjQKJcTl8uXrp... (truncated)");
+          printLine("");
+          printLine("📎 For full file, use: https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
+          printLine("🧠 Or try 'download' command instead.");
+          break;
+        case "other":
+          printLine("Try exploring some hidden commands like 'test' or 'sudo'.");
           break;
         default:
           printLine("Command not found. Type 'help' for a list of commands.");
