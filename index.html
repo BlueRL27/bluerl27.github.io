@@ -58,11 +58,7 @@
     let commandHistory = [];
     let historyIndex = -1;
 
-    const whoamiOutput = `
-Robert Lorence — rlorence2015@gmail.com
-https://github.com/bluerl27
-
-@######(((((((/////((////****************************///////((((((((((((((####@
+    const whoamiOutput = `@######(((((((/////((////****************************///////((((((((((((((####@
 @((((((((((/////////////*******/(##%%##%%%/****************//(((/(((((((((((((((@
 @((((//////////////***,,,****/#%%%%&&%#%%%%&&&&%#/**************/////(((((((((((
 @((((////*///////***,,,,,,/&%%%%%%&%%%%%%%%%%%%&&%&#(**************///(((/(((((@
@@ -95,99 +91,7 @@ https://github.com/bluerl27
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##((#&*,(%(###&&&&&&&&@@@@@@@@@@@@@@&@(/((
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&((/&**((/(#((&&&&&&&&&&&&@@@@@@@@@@@@(((
 
-Roboticist and signal processing engineer focused on real-time embedded systems, bat-inspired sonar, and MEMS antenna design. Building systems that mimic biology and sense the world.
-
-I'm an engineer and entrepreneur with a background that blends hands-on robotics, embedded systems, and large-scale systems integration. Most recently, I helped develop sonar-based autonomous navigation platforms in the rainforests of Brunei, co-creating the first open-access bat echolocation dataset to advance bio-inspired robotics. Prior to that, I spent six years at IBM, leading multi-million-dollar government and healthcare technology projects, developing data pipelines, and managing large cross-functional teams. I also built and launched a travel-tech startup and worked on hardware-in-the-loop grid testing at Monash University. What excites me about Root Ventures is your ethos: you don’t just fund frontier technology—you understand how it’s built. I’m eager to bring my technical curiosity, builder’s mindset, and interdisciplinary background to help Root identify and support the next generation of ambitious founders.
-
-Education:
-  M.S. Electrical Engineering — Virginia Tech
-
-Selected Projects:
-  • Real-time ultrasonic microphone array
-  • MEMS-based reconfigurable antennas
-  • Bat-inspired sonar robot for jungle navigation
-`;
-
-    const commands = {
-      "download": () => "📄 Download my CV here: https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf",
-      "base64cv": () => [
-        "Here’s a Base64 preview of my CV (simulated):",
-        "",
-        "JVBERi0xLjQKJcTl8uXrp... (truncated)",
-        "",
-        "📎 For full file, use: https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf",
-        "🧠 Or try 'download' command instead."
-      ].join("\n"),
-      "sudo": () => "Nice try. You must be this root to run sudo.",
-      "test": () => "🎶 Never gonna give you up... (Rickrolled in spirit, not in iframe)",
-      "launch": () => '🚀 Launching pitch generator...\nQuantumFerret: Autonomous weasel-based network sniffing\nAirTorch: Drone-mounted flamethrowers for controlled burns',
-      "swag": () => "🧢 Swag store access granted! (Just kidding... unless you're really persistent)",
-      "hacker": () => "🛠️ Hacker kit unlocked! Just kidding — but hey, you clearly know how to explore.",
-      "help": "Try commands like whoami, sudo, test, swag, hacker, launch, download, base64cv, clear",
-      "whoami": whoamiOutput,
-      "clear": () => {
-        terminal.innerHTML = "";
-        return "";
-      }
-    };
-
-    function runCommand(input) {
-      const args = input.trim().split(" ");
-      const cmd = args.shift();
-      let output = "command not found — type 'help' for a list of available commands.";
-
-      if (typeof commands[cmd] === "string") {
-        output = commands[cmd];
-      } else if (typeof commands[cmd] === "function") {
-        output = commands[cmd](args);
-      }
-
-      printLine(`${prompt}${input}`);
-      if (output) printLine(output);
-    }
-
-    function printLine(text) {
-      const line = document.createElement("div");
-      line.textContent = text;
-      terminal.appendChild(line);
-      terminal.scrollTop = terminal.scrollHeight;
-    }
-
-    function createInputLine() {
-      const inputLine = document.createElement("div");
-      inputLine.className = "input-line";
-
-      const promptSpan = document.createElement("span");
-      promptSpan.className = "prompt";
-      promptSpan.textContent = prompt;
-
-      const terminalInput = document.createElement("span");
-      terminalInput.className = "terminal-input";
-      terminalInput.contentEditable = true;
-      terminalInput.spellcheck = false;
-      terminalInput.autofocus = true;
-
-      const cursorBox = document.createElement("span");
-cursorBox.className = "blinking-box";
-cursorBox.style.marginLeft = "2px";
-
-      inputLine.appendChild(promptSpan);
-      inputLine.appendChild(terminalInput);
-      inputLine.appendChild(cursorBox);
-
-      terminal.appendChild(inputLine);
-      terminalInput.focus();
-
-      terminalInput.addEventListener("input", () => {
-  const range = document.createRange();
-  const selection = window.getSelection();
-  range.selectNodeContents(terminalInput);
-  range.collapse(false);
-  selection.removeAllRanges();
-  selection.addRange(range);
-
-  const inputWidth = terminalInput.offsetWidth;
-  cursorBox.style.transform = `translateX(${inputWidth}px)`;
+I'm an engineer and entrepreneur with Master’s degrees in Electrical Engineering and Business Analytics, and a BA in Economics from Virginia Tech. My background spans hands-on robotics, embedded systems, and large-scale infrastructure. I recently developed sonar-based autonomous navigation platforms in the Brunei rainforest, co-creating the first public bat echolocation dataset for the country. Before that, I spent six years at IBM leading large government and healthcare tech projects, and I’ve also founded a travel-tech startup and worked on HIL grid testing at Monash University. What excites me about Root Ventures is your belief in backing bold engineering at the frontier, not just funding it, but building alongside it. I’d love to contribute that same mindset to your team.`;
 });
 
       terminalInput.addEventListener("keydown", e => {
@@ -198,7 +102,47 @@ cursorBox.style.marginLeft = "2px";
           historyIndex = -1;
           runCommand(value);
           inputLine.remove();
-          createInputLine();
+          function runCommand(command) {
+  printLine(prompt + command);
+  switch (command.trim()) {
+    case "help":
+      printLine("Available commands:");
+      printLine("  whoami       - Learn more about me");
+      printLine("  launch       - View some quirky startup ideas");
+      printLine("  test         - Just try it...");
+      printLine("  sudo         - Nice try");
+      printLine("  download     - Download my CV");
+      break;
+    case "whoami":
+      printLine(whoamiOutput);
+      break;
+    case "launch":
+      printLine("BirdHaus
+‘Airbnb for backyard birds.’
+Smart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription model includes ‘concierge nesting material service.’
+Tagline: ‘SaaS for sparrows.’
+
+Overthinker.ai
+‘The world’s first LLM trained on your group chats.’
+A GPT-based assistant that’s only trained on your personal Slack, Discord, and group texts, so it mimics the chaos of your actual thought process. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.
+Tagline: ‘It’s like talking to your future self. From 3 a.m.’");
+      break;
+    case "test":
+      printLine("Never gonna give you up, never gonna let you down...");
+      break;
+    case "sudo":
+      printLine("Nice try. You don’t have root.");
+      break;
+    case "download":
+      printLine("📎 Download my CV here:");
+      printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
+      break;
+    default:
+      printLine("Command not found. Type 'help' for a list of commands.");
+  }
+}
+
+createInputLine();
         } else if (e.key === "ArrowUp") {
           if (commandHistory.length > 0) {
             historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
