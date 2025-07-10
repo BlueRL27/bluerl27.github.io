@@ -40,7 +40,6 @@
       height: 1em;
       background-color: #0f0;
       animation: blink-box 1s steps(1) infinite;
-      margin-left: 0;
     }
     @keyframes blink-box {
       50% { opacity: 0; }
@@ -158,8 +157,15 @@ Selected Projects:
       terminal.appendChild(inputLine);
       input.focus();
 
+      const observer = new MutationObserver(() => {
+        const inputWidth = input.scrollWidth;
+        cursorBox.style.transform = `translateX(-${input.offsetWidth - inputWidth}px)`;
+      });
+      observer.observe(input, { attributes: true, attributeFilter: ['value'] });
+
       input.addEventListener("input", () => {
-        cursorBox.style.marginLeft = `${input.scrollWidth}px`;
+        const inputWidth = input.scrollWidth;
+        cursorBox.style.transform = `translateX(-${input.offsetWidth - inputWidth}px)`;
       });
 
       input.addEventListener("keydown", e => {
