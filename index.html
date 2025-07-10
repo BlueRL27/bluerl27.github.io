@@ -19,28 +19,25 @@
       max-width: 100%;
     }
     .input-line {
-      display: flex;
-      align-items: center;
-    }
-    .input-line span {
       white-space: pre;
     }
-    .terminal-input {
+    .input-line .prompt {
+      display: inline;
+    }
+    .input-line input {
       background: none;
       border: none;
       color: #0f0;
       font: inherit;
       outline: none;
-      width: auto;
-      min-width: 1px;
-      flex: none;
+      width: 1ch;
+      caret-color: transparent;
     }
     .blinking-box {
       display: inline-block;
       width: 10px;
       height: 1em;
       background-color: #0f0;
-      margin-left: 2px;
       animation: blink-box 1s steps(1) infinite;
     }
     @keyframes blink-box {
@@ -120,11 +117,12 @@
       inputLine.className = "input-line";
 
       const promptSpan = document.createElement("span");
+      promptSpan.className = "prompt";
       promptSpan.textContent = prompt;
 
       const input = document.createElement("input");
-      input.className = "terminal-input";
-      input.autofocus = true;
+      input.setAttribute("type", "text");
+      input.setAttribute("spellcheck", "false");
 
       const cursorBox = document.createElement("span");
       cursorBox.className = "blinking-box";
@@ -137,9 +135,8 @@
       input.focus();
 
       input.addEventListener("input", () => {
-        const textWidth = input.value.length * 8; // rough width calc per char
-        input.style.width = textWidth + "px";
-        cursorBox.style.display = "inline-block";
+        const width = (input.value.length + 1) + "ch";
+        input.style.width = width;
       });
 
       input.addEventListener("keydown", e => {
@@ -153,6 +150,7 @@
           if (commandHistory.length > 0) {
             historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
             input.value = commandHistory[historyIndex];
+            input.dispatchEvent(new Event("input"));
           }
         } else if (e.key === "ArrowDown") {
           if (historyIndex > 0) {
@@ -161,6 +159,7 @@
           } else {
             input.value = "";
           }
+          input.dispatchEvent(new Event("input"));
         }
       });
     }
