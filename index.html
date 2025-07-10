@@ -168,7 +168,8 @@ Selected Projects:
       terminalInput.autofocus = true;
 
       const cursorBox = document.createElement("span");
-      cursorBox.className = "blinking-box";
+cursorBox.className = "blinking-box";
+cursorBox.style.marginLeft = "2px";
 
       inputLine.appendChild(promptSpan);
       inputLine.appendChild(terminalInput);
@@ -178,9 +179,16 @@ Selected Projects:
       terminalInput.focus();
 
       terminalInput.addEventListener("input", () => {
-        const inputWidth = terminalInput.getBoundingClientRect().width;
-        cursorBox.style.transform = `translateX(${inputWidth}px)`;
-      });
+  const range = document.createRange();
+  const selection = window.getSelection();
+  range.selectNodeContents(terminalInput);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  const inputWidth = terminalInput.offsetWidth;
+  cursorBox.style.transform = `translateX(${inputWidth}px)`;
+});
 
       terminalInput.addEventListener("keydown", e => {
         if (e.key === "Enter") {
