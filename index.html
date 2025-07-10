@@ -9,12 +9,13 @@
       background-color: #000;
       color: #0f0;
       font-family: monospace;
-      padding: 20px;
+      padding: 0;
       margin: 0;
     }
     #terminal {
       white-space: pre-wrap;
       word-wrap: break-word;
+      padding: 20px;
     }
     .input-line {
       display: flex;
@@ -53,7 +54,7 @@
     let commandHistory = [];
     let historyIndex = -1;
 
-    const whoisRobert = `
+    const whoamiOutput = `
 @######(((((((/////((////****************************///////((((((((((((((####@
 @((((((((((/////////////*******/(##%%##%%%/****************//(((/(((((((((((((((
 @((((//////////////***,,,****/#%%%%&&%#%%%%&&&&%#/**************/////(((((((((((
@@ -99,14 +100,11 @@ Selected Projects:
   • Real-time ultrasonic microphone array
   • MEMS-based reconfigurable antennas
   • Bat-inspired sonar robot for jungle navigation
-
-
-    `;
+`;
 
     const commands = {
-      "help": "Try commands like whoami, ls, cd resume, cat cv, echo $GOALS, contact, apply, download, clear, whois robert",
-      "whoami": "Robert Lorence\nRobotics Engineer | Signal Processing | Real-Time Systems",
-      "whois": args => args[0] === "robert" ? whoisRobert : `No such user '${args[0]}'`,
+      "help": "Try commands like whoami, ls, cd resume, cat cv, echo $GOALS, contact, apply, download, clear",
+      "whoami": whoamiOutput,
       "clear": () => {
         terminal.innerHTML = "";
         return "";
