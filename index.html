@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Robert Lorence</title>
   <style>
     body {
@@ -11,30 +11,24 @@
       font-family: monospace;
       padding: 20px;
       margin: 0;
-      overflow-x: hidden;
     }
     #terminal {
       white-space: pre-wrap;
       word-wrap: break-word;
-      max-width: 100%;
     }
     .input-line {
       display: flex;
       align-items: center;
-      white-space: pre;
     }
-    .input-line .prompt {
+    .prompt {
       display: inline;
     }
-    .input-line input {
+    input {
       background: none;
       border: none;
       color: #0f0;
       font: inherit;
       outline: none;
-      caret-color: transparent;
-      padding: 0;
-      margin: 0;
       width: auto;
     }
     .blinking-box {
@@ -47,12 +41,6 @@
     @keyframes blink-box {
       50% { opacity: 0; }
     }
-    @media (max-width: 600px) {
-      body {
-        font-size: 14px;
-        padding: 10px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -63,56 +51,39 @@
     let commandHistory = [];
     let historyIndex = -1;
 
-    const base64CV = "[BASE64_STRING_HERE]";
-
     const whoisRobert = `
-  ██████╗ ██████╗ ██████╗ ██████╗ ███████╗████████╗     ██████╗  ██████╗ ██████╗ 
- ██╔════╝██╔═══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝    ██╔════╝ ██╔═══██╗██╔══██╗
- ██║     ██║   ██║██████╔╝██║  ██║█████╗     ██║       ██║  ███╗██║   ██║██████╔╝
- ██║     ██║   ██║██╔═══╝ ██║  ██║██╔══╝     ██║       ██║   ██║██║   ██║██╔═══╝ 
- ╚██████╗╚██████╔╝██║     ██████╔╝███████╗   ██║       ╚██████╔╝╚██████╔╝██║     
-  ╚═════╝ ╚═════╝ ╚═╝     ╚═════╝ ╚══════╝   ╚═╝        ╚═════╝  ╚═════╝ ╚═╝     
+      +---[RSA 2048]----+
+      |       ...       |
+      |    .oo..        |
+      |   o ++..        |
+      |  = =++o         |
+      | o + o.+S        |
+      |  = + ooo        |
+      |   . .ooo        |
+      |     E=+         |
+      |     .o.         |
+      +----[SHA256]-----+
 
 Robert Lorence — rlorence2015@gmail.com
 https://github.com/bluerl27
 
-Robert is a roboticist and signal processing engineer passionate about real-time embedded systems, bat-inspired sonar, and MEMS antenna design. His work integrates hardware and software to explore autonomous perception and navigation.
+Roboticist and signal processing engineer focused on real-time embedded systems, bat-inspired sonar, and MEMS antenna design. Building systems that mimic biology and sense the world.
 
 Education:
-- M.S. Electrical Engineering, Virginia Tech
+  M.S. Electrical Engineering — Virginia Tech
 
-Projects:
-- Real-time ultrasonic microphone array
-- MEMS-based reconfigurable antennas
-- Bat-inspired sonar robot for jungle navigation
+Selected Projects:
+  • Real-time ultrasonic microphone array
+  • MEMS-based reconfigurable antennas
+  • Bat-inspired sonar robot for jungle navigation
 
 More at: bluerl27.github.io
-`;
+    `;
 
     const commands = {
       "help": "Try commands like whoami, ls, cd resume, cat cv, echo $GOALS, contact, apply, download, clear, whois",
       "whoami": "Robert Lorence\nRobotics Engineer | Signal Processing | Real-Time Systems",
       "whois": args => args[0] === "robert" ? whoisRobert : `No such user '${args[0]}'`,
-      "ls": "resume  projects  contact.sh",
-      "cd": args => {
-        if (args[0] === "resume") return "Now in ~/resume";
-        return `cd: no such file or directory: ${args[0]}`;
-      },
-      "cat": args => {
-        if (args[0] === "cv") return "CV (base64-encoded) placeholder:\n" + base64CV.substring(0, 500) + "...";
-        if (args[0] === "projects") return "- Bat-inspired sonar robot\n- MEMS antenna array\n- Real-time embedded sensor systems";
-        return `cat: ${args[0]}: No such file`;
-      },
-      "echo": args => args.join(" "),
-      "contact": "Email: rlorence2015@gmail.com\nGitHub: github.com/bluerl27",
-      "apply": "Already applied via POST API. See logs.",
-      "download": () => {
-        const link = document.createElement('a');
-        link.href = "data:application/pdf;base64," + base64CV;
-        link.download = "Robert_Lorence_CV.pdf";
-        link.click();
-        return "Downloading CV...";
-      },
       "clear": () => {
         terminal.innerHTML = "";
         return "";
