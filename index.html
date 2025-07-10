@@ -133,41 +133,9 @@ Tagline: “It’s like talking to your future self. From 3 a.m.”`);
 }
 
 
-    }
-
     printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
-    printLine("Type 'help' to get started.");
-    function createInputLine() {
-  const inputLine = document.createElement("div");
-  inputLine.className = "input-line";
-
-  const promptSpan = document.createElement("span");
-  promptSpan.className = "prompt";
-  promptSpan.textContent = prompt;
-  inputLine.appendChild(promptSpan);
-
-  const terminalInput = document.createElement("span");
-  terminalInput.className = "terminal-input";
-  terminalInput.contentEditable = true;
-  terminalInput.spellcheck = false;
-  inputLine.appendChild(terminalInput);
-
-  const cursor = document.createElement("span");
-  cursor.className = "blinking-box";
-  inputLine.appendChild(cursor);
-
-  terminal.appendChild(inputLine);
-  terminalInput.focus();
-
-  terminalInput.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const value = terminalInput.textContent;
-      commandHistory.unshift(value);
-      historyIndex = -1;
-      runCommand(value);
-      inputLine.remove();
-      createInputLine();
+printLine("Type 'help' to get started.");
+createInputLine();
     } else if (e.key === "ArrowUp") {
       if (commandHistory.length > 0) {
         historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
