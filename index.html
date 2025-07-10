@@ -60,101 +60,96 @@
 
     const whoamiOutput = `@######(((((((/////((////****************************///////((((((((((((((####@
 @((((((((((/////////////*******/(##%%##%%%/****************//(((/(((((((((((((((@
-@((((//////////////***,,,****/#%%%%&&%#%%%%&&&&%#/**************/////(((((((((((
-@((((////*///////***,,,,,,/&%%%%%%&%%%%%%%%%%%%&&%&#(**************///(((/(((((@
-@(((//////****//****,,,,*&%%%%%%%%%%%####%%%%#%%&&&&%(**,********////////////(((
-@((/////************,,,/%%%%&####%###((((###(#%%%&&%&&%#,*,************//*////((
-@/////////*******,,,,,,(%&&%##///**/////////(((####%%&%%/,,,,,,,,******///*///((
-@*****//*****,,,,....,*#%&&%#//***********/////(((#%&&&%/,,,,,,,,,*****///////((
-@***********,,,......,(%&&&#(//************/*///((#%%&&%%,....,,,,,******//////(
-@*******,,,,,,,,,...../%&&%(///*************/////(##%&&&&#,...,,.,,,*******/////
-@///**,,,,,,,,,,......,/&&((////**//////*//((#(((###%%&&%%(,..,,,,,,*********///
-@*****,,,,,,,...........(((///(((&&(#(////##%(&#%###%&%,......,..,,,,,,,******/
-@/****,,,,,,,,,........./((///**//////////##((((/(((####.......,....,,,,,*******
-@****,,,,,,,,,,.........*/(////*****//////(##(////(###((.............,,,,,******
-@***,,,,,,,,,..........  /(((////(#(/(##((#%##%((((##(,...............,,,,,*****
-@*,,,,,,,,,,..........    /(((/(#(////////((#####(###.................,,,,,,****
-@***,,,,,,...........     .(//////((**/,//*/(&#(/(##(................,,,,,,,,***
-@*,,,,,,,,,............ ...*(((/////(((((#####(((##(..  ............,,,,,,******
-@**,,,,,,,...............*&&(##(/////((#####((##%%.. .. ..........,,,,,,,,*****/
-@**,,,,,.............*%&@&@@(//###(//////((((%%%%/...............,,,,,,,,,******
-@*,,,,,,,,,....(&&@@@@&@@@@@@////(##%#((((#%%%%%%(.............,..,,,,,,,,******
-@*,,,,,*#&&&@@@@@@@@@@@@@@@@@@*(////((((#####%%%%&(&&&/..........,,,,,,,,*******
-@%&&&@&@&@@@@@@@@@@@@@@@@@@@@@@(((//////(((####%&&##@@&@&&&*.....,,,,,,,,*******
-@&@&@@@@@@@@@@@@@@@@@@@@@@@@@@@@#*#((//(((######&%((%@@@@@&&&&&&,,,,,,,,,*******
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#*(#(((((((###%(&/*/&@@@@@@@&@&&&&&&%*,,*******
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&/(##(((((((((#(////@@@@@@@@@@@&&&&&&&&*******
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#//##((/(/(/**,**,*/@@@@@@@@@@@@@&@&&&&/**///
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@(#%#((((/(,,,,*****/@@@@@@@@@@@@@@@@&&&/////
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&(/*/((((**,/,*&(//*&@@@@@@@@@@@@@&@@@&/////
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&(///(#(,,*%%#&/*#&&@@@@@@@@@@@@@@@@&&%////
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##((#&*,(%(###&&&&&&&&@@@@@@@@@@@@@@&@(/((
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&((/&**((/(#((&&&&&&&&&&&&@@@@@@@@@@@@(((
-
+... (ASCII truncated)
 I'm an engineer and entrepreneur with Master’s degrees in Electrical Engineering and Business Analytics, and a BA in Economics from Virginia Tech. My background spans hands-on robotics, embedded systems, and large-scale infrastructure. I recently developed sonar-based autonomous navigation platforms in the Brunei rainforest, co-creating the first public bat echolocation dataset for the country. Before that, I spent six years at IBM leading large government and healthcare tech projects, and I’ve also founded a travel-tech startup and worked on HIL grid testing at Monash University. What excites me about Root Ventures is your belief in backing bold engineering at the frontier, not just funding it, but building alongside it. I’d love to contribute that same mindset to your team.`;
-function runCommand(command) {
-  printLine(prompt + command);
-  switch (command.trim()) {
-    case "help":
-      printLine("Available commands:");
-      printLine("  whoami       - Learn more about me");
-      printLine("  launch       - View some quirky startup ideas");
-      printLine("  test         - Just try it...");
-      printLine("  sudo         - Nice try");
-      printLine("  download     - Download my CV");
-      break;
-    case "whoami":
-      printLine(whoamiOutput);
-      break;
-    case "launch":
-      printLine(`BirdHaus
-“Airbnb for backyard birds.”
-Smart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription model includes “concierge nesting material service.”
-Tagline: “SaaS for sparrows.”
 
-Overthinker.ai
-“The world’s first LLM trained on your group chats.”
-A GPT-based assistant that’s only trained on your personal Slack, Discord, and group texts, so it mimics the chaos of your actual thought process. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.
-Tagline: “It’s like talking to your future self. From 3 a.m.”`);
-      break;
-    case "test":
-      printLine("Never gonna give you up, never gonna let you down...");
-      break;
-    case "sudo":
-      printLine("Nice try. You don’t have root.");
-      break;
-    case "download":
-      printLine("📎 Download my CV here:");
-      printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
-      break;
-    default:
-      printLine("Command not found. Type 'help' for a list of commands.");
-  }
-}
+    function printLine(text) {
+      const line = document.createElement("div");
+      line.textContent = text;
+      terminal.appendChild(line);
+    }
 
+    function createInputLine() {
+      const inputLine = document.createElement("div");
+      inputLine.className = "input-line";
 
-    printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
-printLine("Type 'help' to get started.");
-createInputLine();
-    } else if (e.key === "ArrowUp") {
-      if (commandHistory.length > 0) {
-        historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
-        terminalInput.textContent = commandHistory[historyIndex];
-      }
-    } else if (e.key === "ArrowDown") {
-      if (historyIndex > 0) {
-        historyIndex--;
-        terminalInput.textContent = commandHistory[historyIndex];
-      } else {
-        terminalInput.textContent = "";
+      const promptSpan = document.createElement("span");
+      promptSpan.className = "prompt";
+      promptSpan.textContent = prompt;
+      inputLine.appendChild(promptSpan);
+
+      const terminalInput = document.createElement("span");
+      terminalInput.className = "terminal-input";
+      terminalInput.contentEditable = true;
+      inputLine.appendChild(terminalInput);
+
+      const cursor = document.createElement("span");
+      cursor.className = "blinking-box";
+      inputLine.appendChild(cursor);
+
+      terminal.appendChild(inputLine);
+      terminalInput.focus();
+
+      terminalInput.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const value = terminalInput.textContent.trim();
+          commandHistory.unshift(value);
+          historyIndex = -1;
+          inputLine.remove();
+          runCommand(value);
+          createInputLine();
+        } else if (e.key === "ArrowUp") {
+          if (commandHistory.length > 0) {
+            historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+            terminalInput.textContent = commandHistory[historyIndex];
+          }
+        } else if (e.key === "ArrowDown") {
+          if (historyIndex > 0) {
+            historyIndex--;
+            terminalInput.textContent = commandHistory[historyIndex];
+          } else {
+            terminalInput.textContent = "";
+          }
+        }
+      });
+    }
+
+    function runCommand(command) {
+      printLine(prompt + command);
+      switch (command) {
+        case "help":
+          printLine("Available commands:");
+          printLine("  whoami       - Learn more about me");
+          printLine("  launch       - View some quirky startup ideas");
+          printLine("  test         - Just try it...");
+          printLine("  sudo         - Nice try");
+          printLine("  download     - Download my CV");
+          break;
+        case "whoami":
+          printLine(whoamiOutput);
+          break;
+        case "launch":
+          printLine(`BirdHaus\n“Airbnb for backyard birds.”\nSmart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription model includes “concierge nesting material service.”\nTagline: “SaaS for sparrows.”\n\nOverthinker.ai\n“The world’s first LLM trained on your group chats.”\nA GPT-based assistant that’s only trained on your personal Slack, Discord, and group texts, so it mimics the chaos of your actual thought process. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.\nTagline: “It’s like talking to your future self. From 3 a.m.”`);
+          break;
+        case "test":
+          printLine("Never gonna give you up, never gonna let you down...");
+          break;
+        case "sudo":
+          printLine("Nice try. You don’t have root.");
+          break;
+        case "download":
+          printLine("📎 Download my CV here:");
+          printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
+          break;
+        default:
+          printLine("Command not found. Type 'help' for a list of commands.");
       }
     }
-  });
-}
 
-printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
-printLine("Type 'help' to get started.");
-createInputLine();
+    printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
+    printLine("Type 'help' to get started.");
+    createInputLine();
   </script>
 </body>
 </html>
