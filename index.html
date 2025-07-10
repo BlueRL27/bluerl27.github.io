@@ -20,15 +20,20 @@
     }
     .input-line {
       display: flex;
+      align-items: center;
     }
-    .input-line input {
+    .input-line span {
+      white-space: pre;
+    }
+    .terminal-input {
       background: none;
       border: none;
       color: #0f0;
       font: inherit;
       outline: none;
-      flex-grow: 1;
-      caret-color: transparent;
+      width: auto;
+      min-width: 1px;
+      flex: none;
     }
     .blinking-box {
       display: inline-block;
@@ -118,7 +123,7 @@
       promptSpan.textContent = prompt;
 
       const input = document.createElement("input");
-      input.id = "cmd";
+      input.className = "terminal-input";
       input.autofocus = true;
 
       const cursorBox = document.createElement("span");
@@ -132,7 +137,9 @@
       input.focus();
 
       input.addEventListener("input", () => {
-        cursorBox.style.display = input.value.length > 0 ? "none" : "inline-block";
+        const textWidth = input.value.length * 8; // rough width calc per char
+        input.style.width = textWidth + "px";
+        cursorBox.style.display = "inline-block";
       });
 
       input.addEventListener("keydown", e => {
