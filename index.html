@@ -65,7 +65,8 @@
         return `cat: ${args[0]}: No such file`;
       },
       "echo": args => args.join(" "),
-      "contact": \"Email: rlorence2015@gmail.com or rlorence@vt.edu\nGitHub: github.com/robertlorence\",
+      "contact": "Email: rlorence2015@gmail.com or rlorence@vt.edu
+GitHub: github.com/robertlorence",
       "apply": "Already applied via POST API. See logs.",
       "download": () => {
         const link = document.createElement('a');
@@ -136,20 +137,7 @@
           runCommand(input.value);
           inputLine.remove();
           createInputLine();
-        } else if (e.key === "ArrowUp") {
-          if (commandHistory.length > 0) {
-            historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
-            input.value = commandHistory[historyIndex];
-          }
-        } else if (e.key === "ArrowDown") {
-          if (historyIndex > 0) {
-            historyIndex--;
-            input.value = commandHistory[historyIndex];
-          } else {
-            input.value = "";
-          }
-        }
-      });
+        });
         } else if (e.key === "ArrowUp") {
           if (commandHistory.length > 0) {
             historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
