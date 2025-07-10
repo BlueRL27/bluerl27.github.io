@@ -156,6 +156,8 @@ I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering
           printLine("  git this repo - View the project repository");
           printLine("  other        - Try some other commands to see what happens");
           printLine("  base64       - View a base64-encoded snippet of my CV");
+          printLine("  clear        - Clear the terminal screen");
+          printLine("  history      - View your recent command history")
           break;
         case "whoami":
           printLine(whoamiOutput);
@@ -196,6 +198,18 @@ Tagline: “It’s like talking to your future self. From 3 a.m.”`);
           break;
         case "other":
           printLine("Try exploring some hidden commands like 'test' or 'sudo'.");
+          break;
+        case "clear":
+          terminal.innerHTML = "";
+          break;
+        case "history":
+          if (commandHistory.length === 0) {
+            printLine("No command history yet.");
+          } else {
+            commandHistory.slice().reverse().forEach((cmd, idx) => {
+              printLine(`${idx + 1}: ${cmd}`);
+            });
+          }
           break;
         default:
           printLine("Command not found. Type 'help' for a list of commands.");
