@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Robert Lorence</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: monospace;
+      padding: 20px;
+    }
+    #terminal {
+      white-space: pre-wrap;
+    }
+    .input-line {
+      display: inline;
+    }
+    .blinking-cursor {
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="terminal"></div>
+  <script>
+    const terminal = document.getElementById("terminal");
+    const prompt = "guest:robertpc ~ $ ";
+    let commandHistory = [];
+    let historyIndex = -1;
+
+    const base64CV = "[BASE64_STRING_HERE]"; // Replace with actual base64
+
+    const commands = {
+      "help": "Try commands like whoami, ls, cd resume, cat cv, echo $GOALS, contact, apply, download, clear",
+      "whoami": "Robert Lorence\nRobotics Engineer | Signal Processing | Real-Time Systems",
+      "ls": "resume  projects  contact.sh",
+      "cd": args => {
+        if (args[0] === "resume") return "Now in ~/resume";
+        return `cd: no such file or directory: ${args[0]}`;
+      },
+      "cat": args => {
+        if (args[0] === "cv") return "CV (base64-encoded) placeholder:\n" + base64CV.substring(0, 500) + "...";
+        if (args[0] === "projects") return "- Bat-inspired sonar robot\n- MEMS antenna array\n- Real-time embedded sensor systems";
+        return `cat: ${args[0]}: No such file`;
+      },
+      "echo": args => args.join(" "),
+      "contact": "Email: robert@example.com\nGitHub: github.com/robertlorence",
+      "apply": "Already applied via POST API. See logs.",
+      "download": () => {
+        const link = document.createElement('a');
+        link.href = "data:application/pdf;base64," + base64CV;
+        link.download = "Robert_Lorence_CV.pdf";
+        link.click();
+        return "Downloading CV...";
+      },
+      "clear": () => {
+        terminal.innerHTML = "";
+        return "";
+      }
+    };
+
+    function runCommand(input) {
+      const args = input.trim().split(" ");
+      const cmd = args.shift();
+      let output = "command not found";
+
+      if (typeof commands[cmd] === "string") {
+        output = commands[cmd];
+      } else if (typeof commands[cmd] === "function") {
+        output = commands[cmd](args);
+      }
+
+      printLine(`${prompt}${input}`);
+      if (output) printLine(output);
+    }
+
+    function printLine(text) {
+      const line = document.createElement("div");
+      line.textContent = text;
+      terminal.appendChild(line);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function createInputLine() {
+      const inputLine = document.createElement("span");
+      inputLine.className = "input-line";
+      inputLine.innerHTML = `<span>${prompt}</span><input type='text' id='cmd' autofocus />`;
+      terminal.appendChild(inputLine);
+      document.getElementById("cmd").focus();
+
+      document.getElementById("cmd").addEventListener("keydown", e => {
+        const input = e.target;
+        if (e.key === "Enter") {
+          commandHistory.unshift(input.value);
+          historyIndex = -1;
+          runCommand(input.value);
+          inputLine.remove();
+          createInputLine();
+        } else if (e.key === "ArrowUp") {
+          if (commandHistory.length > 0) {
+            historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+            input.value = commandHistory[historyIndex];
+          }
+        } else if (e.key === "ArrowDown") {
+          if (historyIndex > 0) {
+            historyIndex--;
+            input.value = commandHistory[historyIndex];
+          } else {
+            input.value = "";
+          }
+        }
+      });
+    }
+
+    // Boot sequence
+    printLine("Welcome to Robert Lorence's terminal resume.");
+    printLine("Type 'help' to get started.");
+    createInputLine();
+  </script>
+</body>
+</html>
