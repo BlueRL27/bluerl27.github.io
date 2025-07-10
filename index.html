@@ -146,6 +146,8 @@ I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering
     }
 
     function runCommand(command) {
+      function runCommand(command) {
+      command = command.toLowerCase().replace(/\s+/g, " ");
       printLine(prompt + command);
       switch (command) {
         case "help":
