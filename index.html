@@ -18,14 +18,13 @@
       word-wrap: break-word;
       max-width: 100%;
     }
-    .input-line { display: inline-flex; align-items: center; }
     .input-line input {
       background: none;
       border: none;
       color: #0f0;
       font: inherit;
       outline: none;
-      width: calc(100% - 10px);
+      width: 100%;
     }
     .blinking-cursor {
       animation: blink 1s step-end infinite;
@@ -49,7 +48,7 @@
     let commandHistory = [];
     let historyIndex = -1;
 
-    const base64CV = "[BASE64_STRING_HERE]"; // Replace with actual base64
+    const base64CV = "[BASE64_STRING_HERE]";
 
     const commands = {
       "help": "Try commands like whoami, ls, cd resume, cat cv, echo $GOALS, contact, apply, download, clear",
@@ -65,7 +64,7 @@
         return `cat: ${args[0]}: No such file`;
       },
       "echo": args => args.join(" "),
-      "contact": \"Email: rlorence2015@gmail.com\nGitHub: github.com/bluerl27\",
+      "contact": "Email: rlorence2015@gmail.com\nGitHub: github.com/bluerl27",
       "apply": "Already applied via POST API. See logs.",
       "download": () => {
         const link = document.createElement('a');
@@ -108,25 +107,9 @@
       const input = document.createElement("input");
       input.id = "cmd";
       input.autofocus = true;
-      input.style.flex = "1";
-      input.style.background = "none";
-      input.style.border = "none";
-      input.style.color = "#0f0";
-      input.style.font = "inherit";
-      input.style.outline = "none";
-
-      const cursor = document.createElement("span");
-      cursor.className = "blinking-cursor";
-      cursor.textContent = "_";
-
-      const prefix = document.createElement("span");
-      prefix.textContent = prompt;
-
-      inputLine.appendChild(prefix);
+      inputLine.appendChild(document.createTextNode(prompt));
       inputLine.appendChild(input);
-      inputLine.appendChild(cursor);
       terminal.appendChild(inputLine);
-
       input.focus();
 
       input.addEventListener("keydown", e => {
@@ -150,23 +133,8 @@
           }
         }
       });
-        } else if (e.key === "ArrowUp") {
-          if (commandHistory.length > 0) {
-            historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
-            input.value = commandHistory[historyIndex];
-          }
-        } else if (e.key === "ArrowDown") {
-          if (historyIndex > 0) {
-            historyIndex--;
-            input.value = commandHistory[historyIndex];
-          } else {
-            input.value = "";
-          }
-        }
-      });
     }
 
-    // Boot sequence
     printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
     printLine("Type 'help' to get started.");
     createInputLine();
