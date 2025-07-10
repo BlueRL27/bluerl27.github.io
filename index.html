@@ -65,8 +65,7 @@
         return `cat: ${args[0]}: No such file`;
       },
       "echo": args => args.join(" "),
-      "contact": "Email: rlorence2015@gmail.com or rlorence@vt.edu
-GitHub: github.com/robertlorence",
+      "contact": \"Email: rlorence2015@gmail.com or rlorence@vt.edu\nGitHub: github.com/robertlorence\",
       "apply": "Already applied via POST API. See logs.",
       "download": () => {
         const link = document.createElement('a');
@@ -152,17 +151,7 @@ GitHub: github.com/robertlorence",
         }
       });
     }
-      terminal.appendChild(inputLine);
-      document.getElementById("cmd").focus();
-
-      document.getElementById("cmd").addEventListener("keydown", e => {
-        const input = e.target;
-        if (e.key === "Enter") {
-          commandHistory.unshift(input.value);
-          historyIndex = -1;
-          runCommand(input.value);
-          inputLine.remove();
-          createInputLine();
+      createInputLine();
         } else if (e.key === "ArrowUp") {
           if (commandHistory.length > 0) {
             historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
