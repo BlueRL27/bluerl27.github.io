@@ -24,15 +24,10 @@
     .prompt {
       display: inline;
     }
-    input {
-      background: none;
-      border: none;
-      color: #0f0;
-      font: inherit;
-      outline: none;
-      width: auto;
-      padding: 0;
-      margin: 0;
+    .terminal-input {
+      display: inline-block;
+      min-width: 1px;
+      white-space: pre;
       caret-color: transparent;
     }
     .blinking-box {
@@ -41,7 +36,7 @@
       height: 1em;
       background-color: #0f0;
       animation: blink-box 1s steps(1) infinite;
-      margin-left: -2px;
+      margin-left: 0;
     }
     @keyframes blink-box {
       50% { opacity: 0; }
@@ -93,6 +88,7 @@ https://github.com/bluerl27
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##((#&*,(%(###&&&&&&&&@@@@@@@@@@@@@@&@(/((
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&((/&**((/(#((&&&&&&&&&&&&@@@@@@@@@@@@(((
 
+
 Roboticist and signal processing engineer focused on real-time embedded systems, bat-inspired sonar, and MEMS antenna design. Building systems that mimic biology and sense the world.
 
 Education:
@@ -143,55 +139,48 @@ Selected Projects:
       promptSpan.className = "prompt";
       promptSpan.textContent = prompt;
 
-      const input = document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("spellcheck", "false");
-      input.style.padding = "0";
-      input.style.margin = "0";
-      input.style.caretColor = "transparent";
+      const terminalInput = document.createElement("span");
+      terminalInput.className = "terminal-input";
+      terminalInput.contentEditable = true;
+      terminalInput.spellcheck = false;
+      terminalInput.autofocus = true;
 
       const cursorBox = document.createElement("span");
       cursorBox.className = "blinking-box";
 
       inputLine.appendChild(promptSpan);
-      inputLine.appendChild(input);
+      inputLine.appendChild(terminalInput);
       inputLine.appendChild(cursorBox);
 
       terminal.appendChild(inputLine);
-      input.focus();
+      terminalInput.focus();
 
-      const observer = new MutationObserver(() => {
-        const inputWidth = input.scrollWidth;
-        cursorBox.style.transform = `translateX(${inputWidth}px)`;
-      });
-      observer.observe(input, { attributes: true, attributeFilter: ['value'] });
-
-      input.addEventListener("input", () => {
-        const inputWidth = input.scrollWidth;
+      terminalInput.addEventListener("input", () => {
+        const inputWidth = terminalInput.textContent.length * 8; // approximate width
         cursorBox.style.transform = `translateX(${inputWidth}px)`;
       });
 
-      input.addEventListener("keydown", e => {
+      terminalInput.addEventListener("keydown", e => {
         if (e.key === "Enter") {
-          commandHistory.unshift(input.value);
+          e.preventDefault();
+          const value = terminalInput.textContent;
+          commandHistory.unshift(value);
           historyIndex = -1;
-          runCommand(input.value);
+          runCommand(value);
           inputLine.remove();
           createInputLine();
         } else if (e.key === "ArrowUp") {
           if (commandHistory.length > 0) {
             historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
-            input.value = commandHistory[historyIndex];
-            input.dispatchEvent(new Event("input"));
+            terminalInput.textContent = commandHistory[historyIndex];
           }
         } else if (e.key === "ArrowDown") {
           if (historyIndex > 0) {
             historyIndex--;
-            input.value = commandHistory[historyIndex];
+            terminalInput.textContent = commandHistory[historyIndex];
           } else {
-            input.value = "";
+            terminalInput.textContent = "";
           }
-          input.dispatchEvent(new Event("input"));
         }
       });
     }
