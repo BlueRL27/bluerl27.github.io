@@ -106,7 +106,52 @@ GitHub: github.com/robertlorence",
     function createInputLine() {
       const inputLine = document.createElement("div");
       inputLine.className = "input-line";
-      inputLine.innerHTML = `<span>${prompt}</span><input type='text' id='cmd' autofocus style='flex:1; background: none; border: none; color: #0f0; font: inherit; outline: none;' />`;
+      const input = document.createElement("input");
+      input.id = "cmd";
+      input.autofocus = true;
+      input.style.flex = "1";
+      input.style.background = "none";
+      input.style.border = "none";
+      input.style.color = "#0f0";
+      input.style.font = "inherit";
+      input.style.outline = "none";
+
+      const cursor = document.createElement("span");
+      cursor.className = "blinking-cursor";
+      cursor.textContent = "_";
+
+      const prefix = document.createElement("span");
+      prefix.textContent = prompt;
+
+      inputLine.appendChild(prefix);
+      inputLine.appendChild(input);
+      inputLine.appendChild(cursor);
+      terminal.appendChild(inputLine);
+
+      input.focus();
+
+      input.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+          commandHistory.unshift(input.value);
+          historyIndex = -1;
+          runCommand(input.value);
+          inputLine.remove();
+          createInputLine();
+        } else if (e.key === "ArrowUp") {
+          if (commandHistory.length > 0) {
+            historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+            input.value = commandHistory[historyIndex];
+          }
+        } else if (e.key === "ArrowDown") {
+          if (historyIndex > 0) {
+            historyIndex--;
+            input.value = commandHistory[historyIndex];
+          } else {
+            input.value = "";
+          }
+        }
+      });
+    }</span><input type='text' id='cmd' autofocus style='flex:1; background: none; border: none; color: #0f0; font: inherit; outline: none;' />`;
       terminal.appendChild(inputLine);
       document.getElementById("cmd").focus();
 
