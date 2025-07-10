@@ -33,6 +33,7 @@
       width: auto;
       padding: 0;
       margin: 0;
+      caret-color: transparent;
     }
     .blinking-box {
       display: inline-block;
@@ -40,6 +41,7 @@
       height: 1em;
       background-color: #0f0;
       animation: blink-box 1s steps(1) infinite;
+      margin-left: -2px;
     }
     @keyframes blink-box {
       50% { opacity: 0; }
@@ -146,6 +148,7 @@ Selected Projects:
       input.setAttribute("spellcheck", "false");
       input.style.padding = "0";
       input.style.margin = "0";
+      input.style.caretColor = "transparent";
 
       const cursorBox = document.createElement("span");
       cursorBox.className = "blinking-box";
@@ -159,13 +162,13 @@ Selected Projects:
 
       const observer = new MutationObserver(() => {
         const inputWidth = input.scrollWidth;
-        cursorBox.style.transform = `translateX(-${input.offsetWidth - inputWidth}px)`;
+        cursorBox.style.transform = `translateX(${inputWidth}px)`;
       });
       observer.observe(input, { attributes: true, attributeFilter: ['value'] });
 
       input.addEventListener("input", () => {
         const inputWidth = input.scrollWidth;
-        cursorBox.style.transform = `translateX(-${input.offsetWidth - inputWidth}px)`;
+        cursorBox.style.transform = `translateX(${inputWidth}px)`;
       });
 
       input.addEventListener("keydown", e => {
