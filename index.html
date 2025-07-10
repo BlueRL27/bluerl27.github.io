@@ -10,12 +10,24 @@
       color: #0f0;
       font-family: monospace;
       padding: 20px;
+      margin: 0;
+      overflow-x: hidden;
     }
     #terminal {
       white-space: pre-wrap;
+      word-wrap: break-word;
+      max-width: 100%;
     }
     .input-line {
-      display: inline;
+      display: block;
+    }
+    .input-line input {
+      background: none;
+      border: none;
+      color: #0f0;
+      font: inherit;
+      outline: none;
+      width: calc(100% - 10px);
     }
     .blinking-cursor {
       animation: blink 1s step-end infinite;
@@ -23,13 +35,19 @@
     @keyframes blink {
       50% { opacity: 0; }
     }
+    @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="terminal"></div>
   <script>
     const terminal = document.getElementById("terminal");
-    const prompt = "guest:robertpc ~ $ ";
+    const prompt = "guest@bluerl27:~$ ";
     let commandHistory = [];
     let historyIndex = -1;
 
@@ -87,7 +105,7 @@
     }
 
     function createInputLine() {
-      const inputLine = document.createElement("span");
+      const inputLine = document.createElement("div");
       inputLine.className = "input-line";
       inputLine.innerHTML = `<span>${prompt}</span><input type='text' id='cmd' autofocus />`;
       terminal.appendChild(inputLine);
@@ -118,7 +136,7 @@
     }
 
     // Boot sequence
-    printLine("Welcome to Robert Lorence's terminal resume.");
+    printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
     printLine("Type 'help' to get started.");
     createInputLine();
   </script>
