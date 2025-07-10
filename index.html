@@ -18,18 +18,27 @@
       word-wrap: break-word;
       max-width: 100%;
     }
+    .input-line {
+      display: flex;
+    }
     .input-line input {
       background: none;
       border: none;
       color: #0f0;
       font: inherit;
       outline: none;
-      width: 100%;
+      flex-grow: 1;
+      caret-color: transparent;
     }
-    .blinking-cursor {
-      animation: blink 1s step-end infinite;
+    .blinking-box {
+      display: inline-block;
+      width: 10px;
+      height: 1em;
+      background-color: #0f0;
+      margin-left: 2px;
+      animation: blink-box 1s steps(1) infinite;
     }
-    @keyframes blink {
+    @keyframes blink-box {
       50% { opacity: 0; }
     }
     @media (max-width: 600px) {
@@ -104,13 +113,27 @@
     function createInputLine() {
       const inputLine = document.createElement("div");
       inputLine.className = "input-line";
+
+      const promptSpan = document.createElement("span");
+      promptSpan.textContent = prompt;
+
       const input = document.createElement("input");
       input.id = "cmd";
       input.autofocus = true;
-      inputLine.appendChild(document.createTextNode(prompt));
+
+      const cursorBox = document.createElement("span");
+      cursorBox.className = "blinking-box";
+
+      inputLine.appendChild(promptSpan);
       inputLine.appendChild(input);
+      inputLine.appendChild(cursorBox);
+
       terminal.appendChild(inputLine);
       input.focus();
+
+      input.addEventListener("input", () => {
+        cursorBox.style.display = input.value.length > 0 ? "none" : "inline-block";
+      });
 
       input.addEventListener("keydown", e => {
         if (e.key === "Enter") {
