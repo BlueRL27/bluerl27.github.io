@@ -22,3 +22,19 @@ Type `help` in the terminal window to see supported commands. Some examples:
 - `cat cv`
 - `download`
 - `contact`
+
+These hidden commands aren’t listed in the help menu, but reward curiosity:
+
+sudo — You’re not root. But nice try.
+
+test — Worth a shot… but beware.
+
+base64 — Preview a base64-encoded snippet of the CV.
+
+other — Suggests even more exploration.
+
+clear — Clears the terminal screen.
+
+history — View previously entered commands.
+
+launch — Pitch generator with quirky startup ideas.
