@@ -58,14 +58,10 @@
     let commandHistory = [];
     let historyIndex = -1;
 
-    const whoamiOutput = `
-Robert Lorence — rlorence2015@gmail.com
-https://github.com/bluerl27
-
-@######(((((((/////((////****************************///////((((((((((((((####@
-@((((((((((/////////////*******/(##%%##%%%/****************//(((/(((((((((((((((@
+    const whoamiOutput = `@######(((((((/////((////****************************///////((((((((((((((####@
+@((((((((((/////////////*******/(##%%##%%%/****************//(((/(((((((((((((((
 @((((//////////////***,,,****/#%%%%&&%#%%%%&&&&%#/**************/////(((((((((((
-@((((////*///////***,,,,,,/&%%%%%%&%%%%%%%%%%%%&&%&#(**************///(((/(((((@
+@((((////*///////***,,,,,,/&%%%%%%&%%%%%%%%%%%%&&%&#(**************///(((/(((((
 @(((//////****//****,,,,*&%%%%%%%%%%%####%%%%#%%&&&&%(**,********////////////(((
 @((/////************,,,/%%%%&####%###((((###(#%%%&&%&&%#,*,************//*////((
 @/////////*******,,,,,,(%&&%##///**/////////(((####%%&%%/,,,,,,,,******///*///((
@@ -95,46 +91,12 @@ https://github.com/bluerl27
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##((#&*,(%(###&&&&&&&&@@@@@@@@@@@@@@&@(/((
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&((/&**((/(#((&&&&&&&&&&&&@@@@@@@@@@@@(((
 
-I'm an engineer and entrepreneur with a background that blends hands-on robotics, embedded systems, and large-scale systems integration. Most recently, I helped develop sonar-based autonomous navigation platforms in the rainforests of Brunei, co-creating the first open-access bat echolocation dataset to advance bio-inspired robotics. Prior to that, I spent six years at IBM, leading multi-million-dollar government and healthcare technology projects, developing data pipelines, and managing large cross-functional teams. I also built and launched a travel-tech startup and worked on hardware-in-the-loop grid testing at Monash University. What excites me about Root Ventures is your ethos: you don’t just fund frontier technology—you understand how it’s built. I’m eager to bring my technical curiosity, builder’s mindset, and interdisciplinary background to help Root identify and support the next generation of ambitious founders.
-
-Education:
-  M.S. Electrical Engineering — Virginia Tech
-
-Selected Projects:
-  • Real-time ultrasonic microphone array
-  • MEMS-based reconfigurable antennas
-  • Bat-inspired sonar robot for jungle navigation
-`;
-
-    const commands = {
-      "help": "Try commands like whoami, ls, cd resume, cat cv, echo $GOALS, contact, apply, download, clear",
-      "whoami": whoamiOutput,
-      "clear": () => {
-        terminal.innerHTML = "";
-        return "";
-      }
-    };
-
-    function runCommand(input) {
-      const args = input.trim().split(" ");
-      const cmd = args.shift();
-      let output = "command not found";
-
-      if (typeof commands[cmd] === "string") {
-        output = commands[cmd];
-      } else if (typeof commands[cmd] === "function") {
-        output = commands[cmd](args);
-      }
-
-      printLine(`${prompt}${input}`);
-      if (output) printLine(output);
-    }
+I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering and Business Analytics, and a BA in Economics from Virginia Tech. My background spans hands-on robotics, embedded systems, and large-scale infrastructure. I recently developed sonar-based autonomous navigation platforms in the Brunei rainforest, co-creating the first public bat echolocation dataset for the country. Before that, I spent six years at IBM leading large government and healthcare tech projects, and I've also founded a travel-tech startup and worked on HIL grid testing at Monash University. What excites me about Root Ventures is your belief in backing bold engineering at the frontier, not just funding it, but building alongside it. I'd love to contribute that same mindset to your team.`;
 
     function printLine(text) {
       const line = document.createElement("div");
       line.textContent = text;
       terminal.appendChild(line);
-      terminal.scrollTop = terminal.scrollHeight;
     }
 
     function createInputLine() {
@@ -144,36 +106,28 @@ Selected Projects:
       const promptSpan = document.createElement("span");
       promptSpan.className = "prompt";
       promptSpan.textContent = prompt;
+      inputLine.appendChild(promptSpan);
 
       const terminalInput = document.createElement("span");
       terminalInput.className = "terminal-input";
       terminalInput.contentEditable = true;
-      terminalInput.spellcheck = false;
-      terminalInput.autofocus = true;
-
-      const cursorBox = document.createElement("span");
-      cursorBox.className = "blinking-box";
-
-      inputLine.appendChild(promptSpan);
       inputLine.appendChild(terminalInput);
-      inputLine.appendChild(cursorBox);
+
+      const cursor = document.createElement("span");
+      cursor.className = "blinking-box";
+      inputLine.appendChild(cursor);
 
       terminal.appendChild(inputLine);
       terminalInput.focus();
 
-      terminalInput.addEventListener("input", () => {
-        const inputWidth = terminalInput.getBoundingClientRect().width;
-        cursorBox.style.transform = `translateX(${inputWidth}px)`;
-      });
-
       terminalInput.addEventListener("keydown", e => {
         if (e.key === "Enter") {
           e.preventDefault();
-          const value = terminalInput.textContent;
+          const value = terminalInput.textContent.trim();
           commandHistory.unshift(value);
           historyIndex = -1;
-          runCommand(value);
           inputLine.remove();
+          runCommand(value);
           createInputLine();
         } else if (e.key === "ArrowUp") {
           if (commandHistory.length > 0) {
@@ -189,6 +143,36 @@ Selected Projects:
           }
         }
       });
+    }
+
+    function runCommand(command) {
+      printLine(prompt + command);
+      switch (command) {
+        case "help":
+          printLine("Available commands:");
+          printLine("  whoami       - Learn more about me");
+          printLine("  launch       - View some quirky startup ideas");
+          printLine("  download     - Download my CV");
+          break;
+        case "whoami":
+          printLine(whoamiOutput);
+          break;
+        case "launch":
+          printLine(`BirdHaus\n“Airbnb for backyard birds.”\nSmart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription model includes “concierge nesting material service.”\nTagline: “SaaS for sparrows.”\n\nOverthinker.ai\n“The world’s first LLM trained on your group chats.”\nA GPT-based assistant that’s only trained on your personal Slack, Discord, and group texts, so it mimics the chaos of your actual thought process. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.\nTagline: “It’s like talking to your future self. From 3 a.m.”`);
+          break;
+        case "test":
+          printLine("Never gonna give you up, never gonna let you down...");
+          break;
+        case "sudo":
+          printLine("Nice try. You don’t have root.");
+          break;
+        case "download":
+          printLine("📎 Download my CV here:");
+          printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
+          break;
+        default:
+          printLine("Command not found. Type 'help' for a list of commands.");
+      }
     }
 
     printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
