@@ -11,7 +11,7 @@ A playful, terminal-style interactive resume for Robert Lorence.
 
 ## Try it Live
 
-👉 [https://robertlorence.github.io](https://bluerl27.github.io)
+👉 [https://bluerl27.github.io](https://bluerl27.github.io)
 
 ## How to Use
 
