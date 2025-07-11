@@ -17,8 +17,12 @@
       word-wrap: break-word;
       padding: 20px;
     }
+    #terminal div {
+      line-height: 1.5em;
+      margin-bottom: 0.3em;
+    }
     .input-line {
-       display: inline;
+      display: inline;
     }
     .prompt {
       display: inline;
@@ -43,8 +47,8 @@
       height: 1em;
       background-color: #0f0;
       vertical-align: bottom;
-     margin-left: 1px;
-     animation: blink-box 1s steps(1) infinite;
+      margin-left: 1px;
+      animation: blink-box 1s steps(1) infinite;
     }
     @keyframes blink-box {
       50% { opacity: 0; }
@@ -54,17 +58,25 @@
 <body>
   <div id="terminal"></div>
   <script>
-    const terminal = document.getElementById("terminal");
-    const prompt = "guest@bluerl27:~$ ";
-    let commandHistory = [];
-    let historyIndex = -1;
+// Your full JavaScript logic will be inserted here.
+// This includes printLine, runCommand, displayMemo, createInputLine, autocomplete, history, and memo handling.
 
-    let memoMode = false;
-    let currentMemoIndex = -1;
+// Example placeholder (you can paste your full code here directly)
 
-    const memos = ["electroflow", "kapta", "promise", "radix"];
-
-    const whoamiOutput = `@######(((((((/////((////****************************///////((((((((((((((####@
+// Terminal DOM setup
+const terminal = document.getElementById("terminal");
+const prompt = "guest@bluerl27:~$ ";
+let commandHistory = [];
+let historyIndex = -1;
+let memoMode = false;
+let currentMemoIndex = -1;
+const memos = ["electroflow", "kapta", "promise", "radix"];
+const availableCommands = [
+  "help", "whoami", "launch", "download", "git", "git this repo", "base64",
+  "history", "clear", "analysis", "analysis electroflow", "analysis kapta",
+  "analysis promise", "analysis radix", "next", "prev", "exit"
+];
+ const whoamiOutput = `@######(((((((/////((////****************************///////((((((((((((((####@
  @((((((((((/////////////*******/(##%%##%%%/****************//(((/(((((((((((((((@
  @((((//////////////***,,,****/#%%%%&&%#%%%%&&&&%#/**************/////(((((((((((@
  @((((////*///////***,,,,,,/&%%%%%%&%%%%%%%%%%%%&&%&#(**************///(((/(((((@
@@ -100,32 +112,33 @@
 Linkedin - www.linkedin.com/in/robert-lorence-83502818a
 
 I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering and Business Analytics, and a BA in Economics from Virginia Tech. My background spans hands-on robotics, embedded systems, and large-scale infrastructure. I recently developed sonar-based autonomous navigation platforms in the Brunei rainforest, co-creating the first public bat echolocation dataset for the country. Before that, I spent six years at IBM leading large government and healthcare tech projects, and I've also founded a travel-tech startup and worked on HIL grid testing at Monash University. What excites me about Root Ventures is your belief in backing bold engineering at the frontier, not just funding it, but building alongside it. I'd love to contribute that same mindset to your team.`;
+// Print a line of text to the terminal
+function printLine(text) {
+  const line = document.createElement("div");
+  line.textContent = text;
+  terminal.appendChild(line);
+  terminal.scrollTop = terminal.scrollHeight;
+}
 
-; // Truncated for brevity, you can paste yours back here
-
-    function printLine(text) {
-      const line = document.createElement("div");
-      line.textContent = text;
-      terminal.appendChild(line);
+// Print wrapped text
+function printWrapped(text, maxWidth = 80) {
+  const words = text.split(" ");
+  let line = "";
+  for (let i = 0; i < words.length; i++) {
+    if ((line + words[i]).length > maxWidth) {
+      printLine(line);
+      line = "";
     }
+    line += words[i] + " ";
+  }
+  if (line.trim().length > 0) printLine(line);
+}
 
-    function printWrapped(text, maxWidth = 80) {
-      const words = text.split(" ");
-      let line = "";
-      for (let i = 0; i < words.length; i++) {
-        if ((line + words[i]).length > maxWidth) {
-          printLine(line);
-          line = "";
-        }
-        line += words[i] + " ";
-      }
-      if (line.trim().length > 0) printLine(line);
-    }
-
-    function displayMemo(name) {
-      printLine(""); // Spacer
-      switch (name) {
-        case "electroflow":
+// Memo viewer
+function displayMemo(name) {
+  printLine("");
+  switch (name) {
+   case "electroflow":
           printLine("Electroflow Technologies");
           printLine(""); // adds vertical spacing
           printWrapped("Overview: Electroflow Technologies is reinventing lithium extraction with a novel electrochemical cell that pulls lithium directly from brine and converts it into cathode material for batteries. This all-in-one approach significantly shortens the lithium supply chain and reduces environmental impact.");
@@ -195,163 +208,176 @@ I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering
           printLine("  - https://www.awexr.com/blog/259-women-making-history-meet-sarah-hashkes-radix-moti");
           break;
       }
-      printLine("\nType 'next', 'prev', or 'exit'");
-    }
+  printLine("Type 'next', 'prev', or 'exit'");
+}
 
-    function runCommand(command) {
-      printLine(prompt + command);
-      const args = command.split(" ");
-      const base = args[0].toLowerCase();
-      const param = args[1]?.toLowerCase();
+function runCommand(command) {
+  printLine(prompt + command);
+  const args = command.split(" ");
+  const base = args[0].toLowerCase();
+  const param = args[1]?.toLowerCase();
 
-      if (memoMode) {
-        switch (base) {
-          case "next":
-            if (currentMemoIndex < memos.length - 1) {
-              currentMemoIndex++;
-              displayMemo(memos[currentMemoIndex]);
-            } else {
-              printLine("You're already at the last memo.");
-            }
-            return;
-          case "prev":
-            if (currentMemoIndex > 0) {
-              currentMemoIndex--;
-              displayMemo(memos[currentMemoIndex]);
-            } else {
-              printLine("You're already at the first memo.");
-            }
-            return;
-          case "exit":
-            memoMode = false;
-            currentMemoIndex = -1;
-            printLine("Exited memo viewer.");
-            return;
-          default:
-            printLine("You're in memo viewer mode. Use 'next', 'prev', or 'exit'.");
-            return;
+  if (memoMode) {
+    switch (base) {
+      case "next":
+        if (currentMemoIndex < memos.length - 1) {
+          currentMemoIndex++;
+          displayMemo(memos[currentMemoIndex]);
+        } else {
+          printLine("You're already at the last memo.");
         }
-      }
+        return;
+      case "prev":
+        if (currentMemoIndex > 0) {
+          currentMemoIndex--;
+          displayMemo(memos[currentMemoIndex]);
+        } else {
+          printLine("You're already at the first memo.");
+        }
+        return;
+      case "exit":
+        memoMode = false;
+        currentMemoIndex = -1;
+        printLine("Exited memo viewer.");
+        return;
+      default:
+        printLine("You're in memo viewer mode. Use 'next', 'prev', or 'exit'.");
+        return;
+    }
+  }
 
-      switch (base) {
-        case "help":
-          printLine("Available commands:");
-          printLine("  whoami         - Learn more about me");
-          printLine("  launch         - View some random startup ideas");
-          printLine("  download       - Download my CV");
-          printLine("  git this repo  - View the project repository");
-          printLine("  base64         - View a base64-encoded snippet of my CV");
-          printLine("  history        - Show previous commands");
-          printLine("  clear          - Clear the terminal");
-          printLine("  analysis       - View memos on Root-aligned companies");
-          break;
-        case "whoami":
-          printLine(whoamiOutput);
-          break;
-        case "launch":
-          printLine("🚀 Launching pitch generator...");
+  switch (base) {
+    case "help":
+      printLine("Available commands:");
+      printLine("  whoami         - Learn more about me");
+      printLine("  launch         - View some random startup ideas");
+      printLine("  download       - Download my CV");
+      printLine("  git this repo  - View the project repository");
+      printLine("  base64         - View a base64-encoded snippet of my CV");
+      printLine("  history        - Show previous commands");
+      printLine("  clear          - Clear the terminal");
+      printLine("  analysis       - View memos on Root-aligned companies");
+      break;
+    case "whoami":
+      printLine(whoamiOutput);
+      break;
+    case "launch":
+      printLine("🚀 Launching pitch generator...");
           printLine(""); // adds vertical spacing
-          printWrapped(`BirdHaus\n“The Airbnb for backyard birds.”\nSmart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription model includes “concierge nesting material service.”\nTagline: “SaaS for sparrows.”\n\nOverthinker.ai\n“The world’s first LLM trained on your group chats.”\nA GPT-based assistant that’s only trained on your personal Slack, Discord, and group texts, so it mimics the chaos of your actual thought process. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.\nTagline: “It’s like talking to your future self. From 3 a.m.”`);
+          printWrapped(`BirdHaus\n“The Airbnb for backyard birds.”\nSmart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription model includes “concierge nesting material service.”\nTagline: “SaaS for sparrows.`);
           printLine(""); // adds vertical spacing
           printWrapped('Overthinker.ai\n“The world’s first LLM trained on your group chats.”\nA GPT-based assistant that’s only trained on your personal Slack, Discord, and group texts, so it mimics the chaos of your actual thought process. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.\nTagline: “It’s like talking to your future self. From 3 a.m.”');
           break;
-        case "download":
-          printLine("📎 Download my CV here:");
-          printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
-          break;
-        case "git":
-        case "git this repo":
-          printLine("📁 Clone or view the repository here:");
-          printLine("https://github.com/bluerl27/robertlorence.github.io");
-          break;
-        case "base64":
-          printLine("Here’s a Base64 preview of my CV (simulated):");
-          printLine("JVBERi0xLjQKJcTl8uXrp... (truncated)");
-          printLine("📎 For full file, use: https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
-          break;
-        case "clear":
-          terminal.innerHTML = "";
-          break;
-        case "history":
-          if (commandHistory.length === 0) {
-            printLine("No previous commands.");
-          } else {
-            commandHistory.slice().reverse().forEach((cmd, i) => {
-              printLine(`${i + 1}: ${cmd}`);
-            });
-          }
-          break;
-        case "analysis":
-          if (!param) {
-            printLine("Analysis available for:");
-            memos.forEach(m => printLine(`  - ${m}`));
-            printLine("Type 'analysis [company]' to view a specific memo.");
-          } else if (memos.includes(param)) {
-            currentMemoIndex = memos.indexOf(param);
-            memoMode = true;
-            displayMemo(param);
-          } else {
-            printLine("Company not recognized. Try: electroflow, kapta, promise, or radix.");
-          }
-          break;
-        default:
-          printLine("Command not found. Type 'help' for a list of commands.");
+    case "download":
+      printLine("📎 Download my CV here:");
+      printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
+      break;
+    case "git":
+    case "git this repo":
+      printLine("📁 Clone or view the repository here:");
+      printLine("https://github.com/bluerl27/robertlorence.github.io");
+      break;
+    case "base64":
+      printLine("Here's a Base64 preview of my CV (simulated):");
+      printLine("JVBERi0xLjQKJcTl8uXrp... (truncated)");
+      break;
+    case "clear":
+      terminal.innerHTML = "";
+      break;
+    case "history":
+      if (commandHistory.length === 0) {
+        printLine("No previous commands.");
+      } else {
+        commandHistory.slice().reverse().forEach((cmd, i) => {
+          printLine(`${i + 1}: ${cmd}`);
+        });
+      }
+      break;
+    case "analysis":
+      if (!param) {
+        printLine("Analysis available for:");
+        memos.forEach(m => printLine(`  - ${m}`));
+        printLine("Type 'analysis [company]' to view a specific memo.");
+      } else if (memos.includes(param)) {
+        currentMemoIndex = memos.indexOf(param);
+        memoMode = true;
+        displayMemo(param);
+      } else {
+        printLine("Company not recognized. Try: electroflow, kapta, promise, or radix.");
+      }
+      break;
+    default:
+      printLine("Command not found. Type 'help' for a list of commands.");
+  }
+}
+
+function createInputLine() {
+  const inputLine = document.createElement("div");
+  inputLine.className = "input-line";
+
+  const promptSpan = document.createElement("span");
+  promptSpan.className = "prompt";
+  promptSpan.textContent = prompt;
+  inputLine.appendChild(promptSpan);
+
+  const terminalInput = document.createElement("span");
+  terminalInput.className = "terminal-input";
+  terminalInput.contentEditable = true;
+  inputLine.appendChild(terminalInput);
+
+  const cursor = document.createElement("span");
+  cursor.className = "blinking-box";
+  inputLine.appendChild(cursor);
+
+  terminal.appendChild(inputLine);
+  terminalInput.focus();
+
+  terminalInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const value = terminalInput.textContent.trim();
+      commandHistory.unshift(value);
+      historyIndex = -1;
+      inputLine.remove();
+      runCommand(value);
+      createInputLine();
+    } else if (e.key === "ArrowUp") {
+      if (commandHistory.length > 0) {
+        historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+        terminalInput.textContent = commandHistory[historyIndex];
+      }
+    } else if (e.key === "ArrowDown") {
+      if (historyIndex > 0) {
+        historyIndex--;
+        terminalInput.textContent = commandHistory[historyIndex];
+      } else {
+        terminalInput.textContent = "";
+      }
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      const currentText = terminalInput.textContent.trim().toLowerCase();
+      const matches = availableCommands.filter(cmd => cmd.startsWith(currentText));
+
+      if (matches.length === 1) {
+        terminalInput.textContent = matches[0];
+      } else if (matches.length > 1) {
+        printLine(prompt + currentText);
+        printLine("Possible matches:");
+        matches.forEach(match => printLine("  " + match));
+        createInputLine();
       }
     }
+  });
+}
 
-    function createInputLine() {
-      const inputLine = document.createElement("div");
-      inputLine.className = "input-line";
+if (window.location.search.includes("root=true")) {
+  printLine("Welcome, and thank you for your time and consideration.");
+}
 
-      const promptSpan = document.createElement("span");
-      promptSpan.className = "prompt";
-      promptSpan.textContent = prompt;
-      inputLine.appendChild(promptSpan);
+printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
+printLine("Type 'help' to get started.");
+createInputLine();
 
-      const terminalInput = document.createElement("span");
-      terminalInput.className = "terminal-input";
-      terminalInput.contentEditable = true;
-      inputLine.appendChild(terminalInput);
-
-      const cursor = document.createElement("span");
-      cursor.className = "blinking-box";
-      inputLine.appendChild(cursor);
-
-      terminal.appendChild(inputLine);
-      terminalInput.focus();
-
-      terminalInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          const value = terminalInput.textContent.trim();
-          commandHistory.unshift(value);
-          historyIndex = -1;
-          inputLine.remove();
-          runCommand(value);
-          createInputLine();
-        } else if (e.key === "ArrowUp") {
-          if (commandHistory.length > 0) {
-            historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
-            terminalInput.textContent = commandHistory[historyIndex];
-          }
-        } else if (e.key === "ArrowDown") {
-          if (historyIndex > 0) {
-            historyIndex--;
-            terminalInput.textContent = commandHistory[historyIndex];
-          } else {
-            terminalInput.textContent = "";
-          }
-        }
-      });
-    }
-
-    if (window.location.search.includes("root=true")) {
-      printLine("Welcome, and thank you for your time and consideration.");
-    }
-
-    printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
-    printLine("Type 'help' to get started.");
-    createInputLine();
-  </script>
+</script>
 </body>
 </html>
