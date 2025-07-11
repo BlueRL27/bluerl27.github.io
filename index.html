@@ -18,22 +18,20 @@
       padding: 20px;
     }
     #terminal div {
-      line-height: 1.5em;
-      margin-bottom: 0.3em;
+      line-height: 1.5em; /* or try 2em for more vertical space */
+      margin-bottom: 0.3em; /* Adds space between lines */
     }
     .input-line {
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap;
+       display: inline;
     }
     .prompt {
       display: inline;
     }
     .terminal-input {
-      display: inline-block;
+      display: inline;
       min-width: 1px;
       white-space: pre;
-      caret-color: #0f0;
+      caret-color: transparent;
       outline: none;
       border: none;
       background: none;
@@ -48,8 +46,9 @@
       width: 8px;
       height: 1em;
       background-color: #0f0;
-      margin-left: 2px;
-      animation: blink-box 1s steps(1) infinite;
+      vertical-align: bottom;
+     margin-left: 1px;
+     animation: blink-box 1s steps(1) infinite;
     }
     @keyframes blink-box {
       50% { opacity: 0; }
