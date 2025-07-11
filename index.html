@@ -22,16 +22,18 @@
       margin-bottom: 0.3em;
     }
     .input-line {
-      display: inline;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
     }
     .prompt {
       display: inline;
     }
     .terminal-input {
-      display: inline;
+      display: inline-block;
       min-width: 1px;
       white-space: pre;
-      caret-color: transparent;
+      caret-color: #0f0;
       outline: none;
       border: none;
       background: none;
@@ -46,8 +48,7 @@
       width: 8px;
       height: 1em;
       background-color: #0f0;
-      vertical-align: bottom;
-      margin-left: 1px;
+      margin-left: 2px;
       animation: blink-box 1s steps(1) infinite;
     }
     @keyframes blink-box {
