@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Robert Lorence</title>
   <style>
     body {
@@ -18,8 +18,7 @@
       padding: 20px;
     }
     .input-line {
-      display: flex;
-      align-items: center;
+       display: inline;
     }
     .prompt {
       display: inline;
@@ -43,7 +42,9 @@
       width: 8px;
       height: 1em;
       background-color: #0f0;
-      animation: blink-box 1s steps(1) infinite;
+      vertical-align: bottom;
+     margin-left: 1px;
+     animation: blink-box 1s steps(1) infinite;
     }
     @keyframes blink-box {
       50% { opacity: 0; }
@@ -58,10 +59,15 @@
     let commandHistory = [];
     let historyIndex = -1;
 
+    let memoMode = false;
+    let currentMemoIndex = -1;
+
+    const memos = ["electroflow", "kapta", "promise", "radix"];
+
     const whoamiOutput = `@######(((((((/////((////****************************///////((((((((((((((####@
-@((((((((((/////////////*******/(##%%##%%%/****************//(((/(((((((((((((((@
-@((((//////////////***,,,****/#%%%%&&%#%%%%&&&&%#/**************/////(((((((((((@
-@((((////*///////***,,,,,,/&%%%%%%&%%%%%%%%%%%%&&%&#(**************///(((/(((((@
+ @((((((((((/////////////*******/(##%%##%%%/****************//(((/(((((((((((((((@
+ @((((//////////////***,,,****/#%%%%&&%#%%%%&&&&%#/**************/////(((((((((((@
+ @((((////*///////***,,,,,,/&%%%%%%&%%%%%%%%%%%%&&%&#(**************///(((/(((((@
 @(((//////****//****,,,,*&%%%%%%%%%%%####%%%%#%%&&&&%(**,********////////////(((@
 @((/////************,,,/%%%%&####%###((((###(#%%%&&%&&%#,*,************//*////((@
 @/////////*******,,,,,,(%&&%##///**/////////(((####%%&%%/,,,,,,,,******///*///((@
@@ -95,10 +101,172 @@ Linkedin - www.linkedin.com/in/robert-lorence-83502818a
 
 I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering and Business Analytics, and a BA in Economics from Virginia Tech. My background spans hands-on robotics, embedded systems, and large-scale infrastructure. I recently developed sonar-based autonomous navigation platforms in the Brunei rainforest, co-creating the first public bat echolocation dataset for the country. Before that, I spent six years at IBM leading large government and healthcare tech projects, and I've also founded a travel-tech startup and worked on HIL grid testing at Monash University. What excites me about Root Ventures is your belief in backing bold engineering at the frontier, not just funding it, but building alongside it. I'd love to contribute that same mindset to your team.`;
 
+; // Truncated for brevity, you can paste yours back here
+
     function printLine(text) {
       const line = document.createElement("div");
       line.textContent = text;
       terminal.appendChild(line);
+    }
+
+    function printWrapped(text, maxWidth = 80) {
+      const words = text.split(" ");
+      let line = "";
+      for (let i = 0; i < words.length; i++) {
+        if ((line + words[i]).length > maxWidth) {
+          printLine(line);
+          line = "";
+        }
+        line += words[i] + " ";
+      }
+      if (line.trim().length > 0) printLine(line);
+    }
+
+    function displayMemo(name) {
+      printLine(""); // Spacer
+      switch (name) {
+        case "electroflow":
+          printLine("✓ Electroflow Technologies");
+          printWrapped("Overview: Electroflow Technologies is reinventing lithium extraction with a novel electrochemical cell that pulls lithium directly from brine and converts it into cathode material for batteries.");
+          printWrapped("Market Opportunity: Global lithium demand is expected to triple by 2030. Electroflow’s cleaner, modular process positions it well for EV and energy storage markets.");
+          printWrapped("Product & Technology: Their electrochemical system bypasses evaporation and chemical precipitation, reducing land and water use while improving efficiency.");
+          printWrapped("Team: Deep expertise in electrochemistry and energy systems.");
+          printWrapped("Why Root Ventures: A classic Root investment — hard tech, IP defensibility, deep infrastructure.");
+          printLine("Reference: https://www.wsj.com/articles/lithium-startup-to-raise-more-cash-for-battery-that-makes-battery-materials-157f08af");
+          break;
+        case "kapta":
+          printLine("✓ Kapta Space");
+          printWrapped("Overview: Kapta Space builds satellites with software-defined radar and steerable antennas, enabling real-time, high-resolution Earth observation.");
+          printWrapped("Market Opportunity: Earth observation is expected to exceed $12B by 2032, with demand in agriculture, climate, and defense.");
+          printWrapped("Product & Technology: Phased-array radar, onboard AI inference, real-time re-tasking. Weather-agnostic and flexible.");
+          printWrapped("Team: Aerospace engineers, radar specialists, and ex-NASA talent.");
+          printWrapped("Why Root Ventures: Full-stack reimagination of sensing. Embedded intelligence and hardware complexity match Root’s thesis.");
+          printLine("Reference: https://www.businessinsider.com/kapta-space-raises-seed-funding-satellite-radar-imaging-2025-2");
+          break;
+        case "promise":
+          printLine("✓ Promise Bio");
+          printWrapped("Overview: Promise Bio is developing an AI-powered epiproteomics platform to diagnose and treat autoimmune and inflammatory diseases.");
+          printWrapped("Market Opportunity: Over 23 million people in the U.S. suffer from autoimmune diseases, yet precision medicine for this class remains limited. Promise Bio could provide foundational tools for diagnostics and drug development.");
+          printWrapped("Product & Technology: Combines epiproteomic tagging, high-throughput screening, and machine learning to decode protein regulation on cell surfaces.");
+          printWrapped("Team: Founded by UCSF and Stanford scientists with hybrid expertise across immunology, AI, and proteomics.");
+          printWrapped("Why Root Ventures: Exemplifies 'science-as-infrastructure' — a deeply technical, defensible, and potentially foundational platform.");
+          printLine("Reference: https://www.promise.bio/");
+          break;
+        case "radix":
+          printLine("✗ Radix Motion");
+          printWrapped("Overview: Developing 'Meu', a 3D movement-based communication platform meant to enhance virtual interactions using body language.");
+          printWrapped("Concerns:");
+          printWrapped("1. Low technical moat — built with standard motion input frameworks (ARKit, Unity).");
+          printWrapped("2. Weak market pull — unclear product-market fit, limited traction.");
+          printWrapped("3. Ecosystem timing — AR/VR platform maturity not there yet.");
+          printWrapped("4. Traction — raised via Wefunder; no strong user metrics or partnerships.");
+          printWrapped("Why We're Passing: Creative but speculative. Lacks the defensibility and technical rigor Root prioritizes.");
+          printLine("References:");
+          printLine("  - https://radixmotion.com/");
+          printLine("  - https://wefunder.com/radixmotion");
+          printLine("  - https://www.awexr.com/blog/259-women-making-history-meet-sarah-hashkes-radix-moti");
+          break;
+      }
+      printLine("\nType 'next', 'prev', or 'exit'");
+    }
+
+    function runCommand(command) {
+      printLine(prompt + command);
+      const args = command.split(" ");
+      const base = args[0].toLowerCase();
+      const param = args[1]?.toLowerCase();
+
+      if (memoMode) {
+        switch (base) {
+          case "next":
+            if (currentMemoIndex < memos.length - 1) {
+              currentMemoIndex++;
+              displayMemo(memos[currentMemoIndex]);
+            } else {
+              printLine("You're already at the last memo.");
+            }
+            return;
+          case "prev":
+            if (currentMemoIndex > 0) {
+              currentMemoIndex--;
+              displayMemo(memos[currentMemoIndex]);
+            } else {
+              printLine("You're already at the first memo.");
+            }
+            return;
+          case "exit":
+            memoMode = false;
+            currentMemoIndex = -1;
+            printLine("Exited memo viewer.");
+            return;
+          default:
+            printLine("You're in memo viewer mode. Use 'next', 'prev', or 'exit'.");
+            return;
+        }
+      }
+
+      switch (base) {
+        case "help":
+          printLine("Available commands:");
+          printLine("  whoami         - Learn more about me");
+          printLine("  launch         - View some quirky startup ideas");
+          printLine("  download       - Download my CV");
+          printLine("  git this repo  - View the project repository");
+          printLine("  base64         - View a base64-encoded snippet of my CV");
+          printLine("  history        - Show previous commands");
+          printLine("  clear          - Clear the terminal");
+          printLine("  analysis       - View memos on Root-aligned companies");
+          break;
+        case "whoami":
+          printLine(whoamiOutput);
+          break;
+        case "launch":
+          printLine("🚀 Launching pitch generator...");
+          printWrapped(`BirdHaus\n“The Airbnb for backyard birds.”\nSmart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors.`);
+          printWrapped(`Overthinker.ai\n“The world’s first LLM trained on your group chats.”\nMimics the chaos of your actual thought process. Great for brainstorming, arguing with yourself, or generating tweets.`);
+          break;
+        case "download":
+          printLine("📎 Download my CV here:");
+          printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
+          break;
+        case "git":
+        case "git this repo":
+          printLine("📁 Clone or view the repository here:");
+          printLine("https://github.com/bluerl27/robertlorence.github.io");
+          break;
+        case "base64":
+          printLine("Here’s a Base64 preview of my CV (simulated):");
+          printLine("JVBERi0xLjQKJcTl8uXrp... (truncated)");
+          printLine("📎 For full file, use: https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
+          break;
+        case "clear":
+          terminal.innerHTML = "";
+          break;
+        case "history":
+          if (commandHistory.length === 0) {
+            printLine("No previous commands.");
+          } else {
+            commandHistory.slice().reverse().forEach((cmd, i) => {
+              printLine(`${i + 1}: ${cmd}`);
+            });
+          }
+          break;
+        case "analysis":
+          if (!param) {
+            printLine("Analysis available for:");
+            memos.forEach(m => printLine(`  - ${m}`));
+            printLine("Type 'analysis [company]' to view a specific memo.");
+          } else if (memos.includes(param)) {
+            currentMemoIndex = memos.indexOf(param);
+            memoMode = true;
+            displayMemo(param);
+          } else {
+            printLine("Company not recognized. Try: electroflow, kapta, promise, or radix.");
+          }
+          break;
+        default:
+          printLine("Command not found. Type 'help' for a list of commands.");
+      }
     }
 
     function createInputLine() {
@@ -145,69 +313,6 @@ I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering
           }
         }
       });
-    }
-
-    function runCommand(command) {
-      printLine(prompt + command);
-      switch (command) {
-        case "help":
-          printLine("Available commands:");
-          printLine("  whoami       - Learn more about me");
-          printLine("  launch       - View some quirky startup ideas");
-          printLine("  download     - Download my CV");
-          printLine("  git this repo - View the project repository");
-          printLine("  other        - Try some other commands to see what happens");
-          printLine("  base64       - View a base64-encoded snippet of my CV");
-          printLine("  history      - Show previous commands");
-          printLine("  clear        - Clear the terminal");
-          break;
-        case "whoami":
-          printLine(whoamiOutput);
-          break;
-        case "launch":
-          printLine("🚀 Launching pitch generator...");
-          printLine(`BirdHaus\n“The Airbnb for backyard birds.”\nSmart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription model includes “concierge nesting material service.”\nTagline: “SaaS for sparrows.”\n\nOverthinker.ai\n“The world’s first LLM trained on your group chats.”\nA GPT-based assistant that’s only trained on your personal Slack, Discord, and group texts, so it mimics the chaos of your actual thought process. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.\nTagline: “It’s like talking to your future self. From 3 a.m.”`);
-          break;
-        case "test":
-          printLine("Never gonna give you up, never gonna let you down...");
-          break;
-        case "sudo":
-          printLine("Nice try. You don’t have root.");
-          break;
-        case "download":
-          printLine("📎 Download my CV here:");
-          printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
-          break;
-        case "git this repo":
-          printLine("📁 Clone or view the repository here:");
-          printLine("https://github.com/bluerl27/robertlorence.github.io");
-          break;
-        case "base64":
-          printLine("Here’s a Base64 preview of my CV (simulated):");
-          printLine("");
-          printLine("JVBERi0xLjQKJcTl8uXrp... (truncated)");
-          printLine("");
-          printLine("📎 For full file, use: https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
-          printLine("🧠 Or try 'download' command instead.");
-          break;
-        case "other":
-          printLine("Try exploring some hidden commands like 'test' or 'sudo'.");
-          break;
-        case "clear":
-          terminal.innerHTML = "";
-          break;
-        case "history":
-          if (commandHistory.length === 0) {
-            printLine("No previous commands.");
-          } else {
-            commandHistory.slice().reverse().forEach((cmd, i) => {
-              printLine(`${i + 1}: ${cmd}`);
-            });
-          }
-          break;
-        default:
-          printLine("Command not found. Type 'help' for a list of commands.");
-      }
     }
 
     if (window.location.search.includes("root=true")) {
