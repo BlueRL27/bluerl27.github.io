@@ -1,40 +1,78 @@
-# robertlorence.github.io
+https://bluerl27.github.io
 
-A playful, terminal-style interactive resume for Robert Lorence.
+A playful, terminal-style interactive resume for Robert Lorence, built entirely with HTML, CSS, and JavaScript. Inspired by classic UNIX command-line interfaces, this site showcases technical work, startup analysis, and a bit of personality — all in a familiar green-on-black terminal.
 
-## Features
+✨ Features
+Fully interactive CLI-style interface
 
-- Command-line interface with classic UNIX-inspired commands
-- Base64-encoded downloadable CV
-- Easter eggs referencing hard tech, robotics, and engineering
-- Built for GitHub Pages
+Classic commands like whoami, clear, history
 
-## Try it Live
+Downloadable CV (PDF + base64 preview)
 
-👉 [https://bluerl27.github.io](https://bluerl27.github.io)
+Startup pitch generator (launch)
 
-## How to Use
+Deep tech investment memos (analysis)
 
-Type `help` in the terminal window to see supported commands. Some examples:
+Hidden easter eggs for the curious
 
-- `whoami`
-- `cd resume`
-- `cat cv`
-- `download`
-- `contact`
+100% static — built for GitHub Pages
 
-These hidden commands aren’t listed in the help menu, but reward curiosity:
+🔗 Try It Live
+👉 https://bluerl27.github.io
 
-sudo — You’re not root. But nice try.
+🕹️ How to Use
+Type help in the terminal window to see available commands.
 
-test — Worth a shot… but beware.
+Available Commands
+bash
+Copy
+Edit
+whoami         # Learn more about me
+launch         # View some random startup ideas
+download       # Download my CV
+git this repo  # View the GitHub repository
+base64         # See a base64-encoded snippet of my CV
+history        # Show previously entered commands
+clear          # Clear the terminal
+analysis       # View memos on Root-aligned companies
+Inside analysis mode, use:
 
-base64 — Preview a base64-encoded snippet of the CV.
+bash
+Copy
+Edit
+next           # View next company memo
+prev           # View previous memo
+exit           # Exit memo viewer
+🔒 Easter Eggs
+Not listed in the help menu — but definitely worth trying:
 
-other — Suggests even more exploration.
+bash
+Copy
+Edit
+sudo root      # 🔓 Unlock special Root Ventures message
+🛠 Built With
+HTML / CSS / JavaScript (no frameworks)
 
-clear — Clears the terminal screen.
+Designed for GitHub Pages
 
-history — View previously entered commands.
+Inspired by command-line culture, green text, and startup scouting
 
-launch — Pitch generator with quirky startup ideas.
+📄 CV
+You can download the PDF via the download command, or directly here:
+
+
+
+🤝 About
+Robert Lorence is an engineer, builder, and writer focused on frontier tech — from real-time sonar systems and robotics to startup scouting and venture analysis.
+
+Connect: Linkedin - www.linkedin.com/in/robert-lorence-83502818a, Email - Rlorence2015@gmail.com
+
+
+
+
+
+
+
+
+
+
