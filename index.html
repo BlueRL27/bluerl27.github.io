@@ -296,6 +296,65 @@ I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering
 
     const availableCommands = ["help", "whoami", "launch", "download", "git", "git this repo", "base64","history", "clear", "analysis", "analysis electroflow", "analysis kapta","analysis promise", "analysis radix","next", "prev", "exit"];
 
+    function createInputLine() {
+    const inputLine = document.createElement("div");
+    inputLine.className = "input-line";
+
+    const promptSpan = document.createElement("span");
+    promptSpan.className = "prompt";
+    promptSpan.textContent = prompt;
+    inputLine.appendChild(promptSpan);
+
+    const terminalInput = document.createElement("span");
+    terminalInput.className = "terminal-input";
+    terminalInput.contentEditable = true;
+    inputLine.appendChild(terminalInput);
+
+    const cursor = document.createElement("span");
+    cursor.className = "blinking-box";
+    inputLine.appendChild(cursor);
+
+    terminal.appendChild(inputLine);
+    terminalInput.focus();
+
+    terminalInput.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+        e.preventDefault();
+        const value = terminalInput.textContent.trim();
+        commandHistory.unshift(value);
+        historyIndex = -1;
+        inputLine.remove();
+        runCommand(value);
+        createInputLine();
+        } else if (e.key === "ArrowUp") {
+        if (commandHistory.length > 0) {
+            historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+            terminalInput.textContent = commandHistory[historyIndex];
+        }
+        } else if (e.key === "ArrowDown") {
+        if (historyIndex > 0) {
+            historyIndex--;
+            terminalInput.textContent = commandHistory[historyIndex];
+        } else {
+            terminalInput.textContent = "";
+        }
+        } else if (e.key === "Tab") {
+        e.preventDefault();
+        const currentText = terminalInput.textContent.trim().toLowerCase();
+        const matches = availableCommands.filter(cmd => cmd.startsWith(currentText));
+
+        if (matches.length === 1) {
+            terminalInput.textContent = matches[0];
+        } else if (matches.length > 1) {
+            printLine(prompt + currentText);
+            printLine("Possible matches:");
+            matches.forEach(match => printLine("  " + match));
+            createInputLine();
+        }
+        }
+    });
+    }
+
     function runCommand(command) {
       printLine(prompt + command);
       const args = command.split(" ");
