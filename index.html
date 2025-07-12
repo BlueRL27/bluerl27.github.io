@@ -68,6 +68,33 @@ let historyIndex = -1;
 let memoMode = false;
 let currentMemoIndex = -1;
 const memos = ["electroflow", "kapta", "promise", "radix"];
+const startupIdeas = [
+  {
+    name: "BirdHaus",
+    tagline: "SaaS for sparrows.",
+    description: `“The Airbnb for backyard birds.” Smart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription includes “concierge nesting material service.”`
+  },
+  {
+    name: "Overthinker.ai",
+    tagline: "It’s like talking to your future self. From 3 a.m.",
+    description: `“The world’s first LLM trained on your group chats.” A GPT-based assistant trained on your Slack, Discord, and group texts. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.`
+  },
+  {
+    name: "DroneFold",
+    tagline: "Origami for the skies.",
+    description: `Flat-pack delivery drones that self-assemble using heat-activated hinges. Ships like an envelope, flies like a quadcopter. Good for humanitarian drops, field kits, or just really cool Amazon packages.`
+  },
+  {
+    name: "TimeShift Scheduler",
+    tagline: "The calendar fights back.",
+    description: `AI calendar assistant that shifts meetings to preserve deep work blocks. Automatically reschedules low-priority events and negotiates calendar conflicts.`
+  },
+  {
+    name: "Meatspace CRM",
+    tagline: "Never forget a face. Or a handshake.",
+    description: `A computer vision app for in-person networking that logs sentiment and syncs interactions with your CRM. Like Notion meets Minority Report for business cards.`
+  }
+];
 const availableCommands = [
 "help", "whoami", "launch", "download", "git", "git this repo", "base64",
 "history", "clear", "analysis", "analysis electroflow", "analysis kapta",
@@ -450,12 +477,13 @@ printLine("sudo: permission denied.");
 }
 break;
 case "launch":
-printLine("🚀 Launching pitch generator...");
-printLine(""); // adds vertical spacing
-printWrapped(`BirdHaus\n“The Airbnb for backyard birds.”\nSmart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription model includes “concierge nesting material service.”\nTagline: “SaaS for sparrows.`);
-printLine(""); // adds vertical spacing
-printWrapped('Overthinker.ai\n“The world’s first LLM trained on your group chats.”\nA GPT-based assistant that’s only trained on your personal Slack, Discord, and group texts, so it mimics the chaos of your actual thought process. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.\nTagline: “It’s like talking to your future self. From 3 a.m.”');
-break;
+  printLine("🚀 Launching pitch generator...\n");
+  const shuffled = startupIdeas.sort(() => 0.5 - Math.random()).slice(0, 2);
+  shuffled.forEach(idea => {
+    printWrapped(`${idea.name}\n${idea.description}\nTagline: "${idea.tagline}"\n`);
+    printLine(""); // spacing
+  });
+  break;
 case "download":
 printLine("📎 Download my CV here:");
 printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
