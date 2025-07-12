@@ -530,8 +530,12 @@ case "launch":
   printLine("🚀 Launching pitch generator...\n");
   const shuffled = startupIdeas.sort(() => 0.5 - Math.random()).slice(0, 2);
   shuffled.forEach(idea => {
-    printWrapped(`${idea.name}\n${idea.description}\nTagline: "${idea.tagline}"\n`);
-    printLine(""); // spacing
+    printLine("────────────────────────────────────────────");
+    printWrapped(`${idea.name}`);
+    printWrapped(`Tagline: "${idea.tagline}"`);
+    printLine("");
+    printWrapped(idea.description);
+    printLine("────────────────────────────────────────────\n");
   });
   break;
 case "download":
