@@ -1,6 +1,6 @@
 bluerl27.github.io
 
-A terminal-style interactive resume for Robert Lorence, built using HTML, CSS, and JavaScript. Inspired by classic UNIX command-line interfaces, this site showcases technical work, and startup analysis all in a familiar green-on-black terminal.
+A terminal-style interactive resume for Robert Lorence, built using HTML, CSS, and JavaScript. Inspired by classic UNIX command-line interfaces, this site showcases technical work, and startup analysis, all in a familiar green-on-black terminal.
 
 ✨ Features
 
@@ -30,7 +30,9 @@ base64         # See a base64-encoded snippet of my CV
 history        # Show previously entered commands
 clear          # Clear the terminal
 analysis       # View memos on Root-aligned companies
+
 Inside analysis mode, use:
+
 next           # View next company memo
 prev           # View previous memo
 exit           # Exit memo viewer
@@ -51,6 +53,5 @@ sudo root      # 🔓 Unlock special Root Ventures message
 You can download the PDF via the download command, or directly here: https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf
  
 Connect: Linkedin - www.linkedin.com/in/robert-lorence-83502818a, Email – Rlorence2015@gmail.com
-
 
 
