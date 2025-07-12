@@ -16,6 +16,7 @@
       white-space: pre-wrap;
       word-wrap: break-word;
       padding: 20px;
+      overflow-x: auto;
     }
     #terminal div {
       line-height: 1.5em; /* or try 2em for more vertical space */
@@ -37,6 +38,7 @@
       background: none;
       padding: 0;
       margin: 0;
+      vertical-align: middle;
     }
     .terminal-input {
       line-height: 1em;
@@ -382,7 +384,7 @@ function displayMemo(name) {
           printLine("  • https://www.awexr.com/blog/259-women-making-history-meet-sarah-hashkes-radix-moti");
           break;
       }
-  printLine("Type 'next', 'prev', or 'exit'");
+  printLine("Use 'next', 'prev', or 'exit' to navigate memos.");
 }
 
 function runCommand(command) {
