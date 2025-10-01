@@ -5,19 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Robert Lorence — Deep-Tech Builder</title>
 <style>
-body { background-color:#000; color:#0f0; font-family:monospace; padding:0; margin:0; }
-#terminal { white-space:pre-wrap; word-wrap:break-word; padding:20px; overflow-x:auto; }
-#terminal div { line-height:1.5em; margin-bottom:0.3em; }
-.input-line { display:inline; }
-.prompt { display:inline; }
-.terminal-input { display:inline; min-width:1px; white-space:pre; caret-color:transparent; outline:none; border:none; background:none; padding:0; margin:0; vertical-align:middle; }
-.terminal-input { line-height:1em; }
-.blinking-box { display:inline-block; width:8px; height:1em; background-color:#0f0; vertical-align:middle; margin-left:2px; animation:blink-box 1s steps(1) infinite; }
-@keyframes blink-box { 50% { opacity:0; } }
+  :root { --bg:#000; --fg:#0f0; --fg-dim:#0c0; }
+  body { background-color:var(--bg); color:var(--fg); font-family:monospace; padding:0; margin:0; }
+  /* Header */
+  .header {
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+    padding:12px 16px; border-bottom:1px solid #033;
+    position:sticky; top:0; background:#000; z-index:10;
+  }
+  .brand { font-weight:700; letter-spacing:0.5px; margin-right:auto; }
+  .btn {
+    display:inline-block; padding:8px 10px; border:1px solid var(--fg);
+    text-decoration:none; color:var(--fg); border-radius:6px;
+  }
+  .btn:hover { background:#011; }
+  /* Terminal */
+  #terminal { white-space:pre-wrap; word-wrap:break-word; padding:20px; overflow-x:auto; }
+  #terminal div { line-height:1.5em; margin-bottom:0.3em; }
+  .input-line { display:inline; }
+  .prompt { display:inline; }
+  .terminal-input {
+    display:inline; min-width:1px; white-space:pre; caret-color:transparent; outline:none;
+    border:none; background:none; padding:0; margin:0; vertical-align:middle; line-height:1em;
+  }
+  .blinking-box { display:inline-block; width:8px; height:1em; background-color:var(--fg);
+    vertical-align:middle; margin-left:2px; animation:blink-box 1s steps(1) infinite; }
+  @keyframes blink-box { 50% { opacity:0; } }
+  @media (max-width:600px){
+    .btn { padding:8px 8px; }
+  }
 </style>
 </head>
 <body>
+
+<!-- Minimalist static header -->
+<div class="header" role="navigation" aria-label="Quick actions">
+  <div class="brand">Robert Lorence</div>
+  <a class="btn" href="https://bluerl27.github.io/cv/Robert_Lorence_CV_Fall_2025.pdf" target="_blank" rel="noopener">CV</a>
+  <a class="btn" href="https://bluerl27.github.io/cases/Robert_Lorence_Investment_Analyses.pdf" target="_blank" rel="noopener">Dossier</a>
+  <a class="btn" href="mailto:robert.lorence27@gmail.com">Email</a>
+  <a class="btn" href="https://www.linkedin.com/in/robert-lorence-83502818a" target="_blank" rel="noopener">LinkedIn</a>
+</div>
+
 <div id="terminal"></div>
+
 <script>
 // ===== Terminal setup =====
 const terminal = document.getElementById("terminal");
@@ -28,10 +59,9 @@ let memoMode = false;
 let currentMemoIndex = -1;
 
 // ===== Analyses / memos registry =====
-// Add your three new cases here (lowercase keys)
 const memos = ["starboard", "carbon280", "mci"];
 
-// Fun ideas kept
+// Fun ideas (kept)
 const startupIdeas = [
   { name:"BirdHaus", tagline:"SaaS for sparrows.", description:`“The Airbnb for backyard birds.” Smart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription includes “concierge nesting material service.”` },
   { name:"Overthinker.ai", tagline:"It’s like talking to your future self. From 3 a.m.", description:`“The world’s first LLM trained on your group chats.” A GPT-based assistant trained on your Slack, Discord, and group texts. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.` },
@@ -41,9 +71,9 @@ const startupIdeas = [
 ];
 
 const availableCommands = [
-  "help","whoami","launch","download","download dossier","git","git this repo","base64",
+  "help","whoami","launch","download","dossier","git","git this repo","base64",
   "history","clear","analysis","analysis starboard","analysis carbon280","analysis mci",
-  "cases anz","next","prev","exit","sudo blackbird"
+  "next","prev","exit","sudo blackbird"
 ];
 
 // ===== whoami text (Blackbird-aligned) =====
@@ -102,7 +132,6 @@ function displayMemo(name){
   printLine("");
   switch(name){
 
-    // === NEW: Starboard ===
     case "starboard":
       printLine("Starboard Maritime Intelligence"); printLine("");
       printWrapped("Snapshot: Auckland-based maritime domain awareness platform illuminating the global ‘shadow fleet’. Fuses AIS, SAR/EO imagery, RF, and behavioral ML to deliver legally defensible alerts for navies, insurers, traders, and ESG.");
@@ -122,7 +151,6 @@ function displayMemo(name){
       printWrapped("Why me: I’ve built multimodal sensing for GPS-denied field robotics (sonar/vision/IMU). I can diligence fusion logic, failure modes, and operational reliability.");
       break;
 
-    // === NEW: Carbon280 ===
     case "carbon280":
       printLine("Carbon280"); printLine("");
       printWrapped("Snapshot: Australian DAC startup using modular sorbent capture with mineralization to create permanent, verifiable CO₂ sinks as stable carbonates. Targets distributed, off-grid deployments.");
@@ -140,7 +168,6 @@ function displayMemo(name){
       printWrapped("Why me: Hardware/process experience to evaluate pilot design, instrumentation, reliability in remote conditions.");
       break;
 
-    // === NEW: MCi Carbon ===
     case "mci":
       printLine("MCi Carbon (Mineral Carbonation International)"); printLine("");
       printWrapped("Snapshot: Carbon utilization via mineral carbonation—permanently converts industrial CO₂ into carbon-negative aggregates, fillers, and SCMs. Closes loop between emitter and materials market.");
@@ -157,7 +184,6 @@ function displayMemo(name){
       printLine("");
       printWrapped("Why me: HIL, embedded sensing, and process-control background to assess automation, data integrity, and MRV credibility.");
       break;
-
   }
   printLine("Use 'next', 'prev', or 'exit' to navigate memos.");
 }
@@ -192,13 +218,12 @@ function runCommand(command){
       printLine("  whoami              - Learn more about me");
       printLine("  launch              - View some random startup ideas");
       printLine("  download            - Download my CV");
-      printLine("  download dossier    - Download my ANZ cases PDF");
+      printLine("  dossier             - Download my ANZ cases PDF");
       printLine("  git this repo       - View the project repository");
       printLine("  base64              - View a base64-encoded snippet of my CV");
       printLine("  history             - Show previous commands");
       printLine("  clear               - Clear the terminal");
-      printLine("  cases anz           - List ANZ case analyses");
-      printLine("  analysis [name]     - View a specific memo (e.g., analysis starboard)");
+      printLine("  analysis [name]     - View a specific memo (starboard | carbon280 | mci)");
       break;
 
     case "whoami":
@@ -228,10 +253,9 @@ function runCommand(command){
       printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_Fall_2025.pdf");
       break;
 
-    case "download":
-    case "download dossier":
+    case "dossier":
       printLine("📎 Download my ANZ cases dossier here:");
-      printLine("https://bluerl27.github.io/cases/Robert_Lorence_Investment_Analyses.pdf"); // <-- update this path after you upload
+      printLine("https://bluerl27.github.io/cases/Robert_Lorence_Investment_Analyses.pdf");
       break;
 
     case "git":
@@ -253,18 +277,6 @@ function runCommand(command){
       else { commandHistory.slice().reverse().forEach((cmd,i)=>printLine(`${i+1}: ${cmd}`)); }
       break;
 
-    case "cases":
-      if (param === "anz"){
-        printLine("ANZ cases available:");
-        printLine("  - starboard   (maritime domain awareness / grey-zone security)");
-        printLine("  - carbon280   (modular DAC + mineralization)");
-        printLine("  - mci         (mineral carbonation / carbon-negative materials)");
-        printLine("Use: analysis [name]");
-      } else {
-        printLine("Usage: cases anz");
-      }
-      break;
-
     case "analysis":
       if (!param){
         printLine("Analyses available:");
@@ -275,7 +287,7 @@ function runCommand(command){
         memoMode = true;
         displayMemo(param);
       } else {
-        printLine("Memo not recognized. Try: starboard, carbon280, mci, electroflow, kapta, promise, radix.");
+        printLine("Memo not recognized. Try: starboard, carbon280, mci.");
       }
       break;
 
