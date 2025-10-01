@@ -3,103 +3,50 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Robert Lorence</title>
+<title>Robert Lorence — Deep-Tech Builder</title>
 <style>
-body {
-background-color: #000;
-color: #0f0;
-font-family: monospace;
-padding: 0;
-margin: 0;
-}
-#terminal {
-white-space: pre-wrap;
-word-wrap: break-word;
-padding: 20px;
-overflow-x: auto;
-}
-#terminal div {
-line-height: 1.5em; /* or try 2em for more vertical space */
-margin-bottom: 0.3em; /* Adds space between lines */
-}
-.input-line {
-display: inline;
-}
-.prompt {
-display: inline;
-}
-.terminal-input {
-display: inline;
-min-width: 1px;
-white-space: pre;
-caret-color: transparent;
-outline: none;
-border: none;
-background: none;
-padding: 0;
-margin: 0;
-vertical-align: middle;
-}
-.terminal-input {
-line-height: 1em;
-}
-.blinking-box {
-display: inline-block;
-width: 8px;
-height: 1em;
-background-color: #0f0;
-vertical-align: middle;
-margin-left: 2px; /* or tweak as needed */
-animation: blink-box 1s steps(1) infinite;
-}
-@keyframes blink-box {
-50% { opacity: 0; }
-}
+body { background-color:#000; color:#0f0; font-family:monospace; padding:0; margin:0; }
+#terminal { white-space:pre-wrap; word-wrap:break-word; padding:20px; overflow-x:auto; }
+#terminal div { line-height:1.5em; margin-bottom:0.3em; }
+.input-line { display:inline; }
+.prompt { display:inline; }
+.terminal-input { display:inline; min-width:1px; white-space:pre; caret-color:transparent; outline:none; border:none; background:none; padding:0; margin:0; vertical-align:middle; }
+.terminal-input { line-height:1em; }
+.blinking-box { display:inline-block; width:8px; height:1em; background-color:#0f0; vertical-align:middle; margin-left:2px; animation:blink-box 1s steps(1) infinite; }
+@keyframes blink-box { 50% { opacity:0; } }
 </style>
 </head>
 <body>
 <div id="terminal"></div>
 <script>
-// Terminal DOM setup
+// ===== Terminal setup =====
 const terminal = document.getElementById("terminal");
-const prompt = "guest@bluerl27:~$ ";
+const prompt = "guest@lorence.sh:~$ ";
 let commandHistory = [];
 let historyIndex = -1;
 let memoMode = false;
 let currentMemoIndex = -1;
-const memos = ["electroflow", "kapta", "promise", "radix"];
+
+// ===== Analyses / memos registry =====
+// Add your three new cases here (lowercase keys)
+const memos = ["starboard", "carbon280", "mci"];
+
+// Fun ideas kept
 const startupIdeas = [
-  {
-    name: "BirdHaus",
-    tagline: "SaaS for sparrows.",
-    description: `“The Airbnb for backyard birds.” Smart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription includes “concierge nesting material service.”`
-  },
-  {
-    name: "Overthinker.ai",
-    tagline: "It’s like talking to your future self. From 3 a.m.",
-    description: `“The world’s first LLM trained on your group chats.” A GPT-based assistant trained on your Slack, Discord, and group texts. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.`
-  },
-  {
-    name: "DroneFold",
-    tagline: "Origami for the skies.",
-    description: `Flat-pack delivery drones that self-assemble using heat-activated hinges. Ships like an envelope, flies like a quadcopter. Good for humanitarian drops, field kits, or just really cool Amazon packages.`
-  },
-  {
-    name: "TimeShift Scheduler",
-    tagline: "The calendar fights back.",
-    description: `AI calendar assistant that shifts meetings to preserve deep work blocks. Automatically reschedules low-priority events and negotiates calendar conflicts.`
-  },
-  {
-    name: "Meatspace CRM",
-    tagline: "Never forget a face. Or a handshake.",
-    description: `A computer vision app for in-person networking that logs sentiment and syncs interactions with your CRM. Like Notion meets Minority Report for business cards.`
-  }
+  { name:"BirdHaus", tagline:"SaaS for sparrows.", description:`“The Airbnb for backyard birds.” Smart birdhouses with onboard thermal cameras, weight sensors, and chirp recognition — enabling urban birders to rent out safe nesting pods and track migratory visitors. Subscription includes “concierge nesting material service.”` },
+  { name:"Overthinker.ai", tagline:"It’s like talking to your future self. From 3 a.m.", description:`“The world’s first LLM trained on your group chats.” A GPT-based assistant trained on your Slack, Discord, and group texts. Great for brainstorming, arguing with yourself, or generating tweets that would’ve been funny last year.` },
+  { name:"DroneFold", tagline:"Origami for the skies.", description:`Flat-pack delivery drones that self-assemble using heat-activated hinges. Ships like an envelope, flies like a quadcopter. Good for humanitarian drops, field kits, or just really cool Amazon packages.` },
+  { name:"TimeShift Scheduler", tagline:"The calendar fights back.", description:`AI calendar assistant that shifts meetings to preserve deep work blocks. Automatically reschedules low-priority events and negotiates calendar conflicts.` },
+  { name:"Meatspace CRM", tagline:"Never forget a face. Or a handshake.", description:`A computer vision app for in-person networking that logs sentiment and syncs interactions with your CRM. Like Notion meets Minority Report for business cards.` }
 ];
+
 const availableCommands = [
-"help", "whoami", "launch", "download", "git", "git this repo", "base64",
-"history", "clear", "analysis", "analysis electroflow", "analysis kapta",
-"analysis promise", "analysis radix", "next", "prev", "exit", "sudo root"
+  "help","whoami","launch","download","download dossier","git","git this repo","base64",
+  "history","clear","analysis","analysis starboard","analysis carbon280","analysis mci",
+  "cases anz","next","prev","exit","sudo blackbird"
 ];
+
+// ===== whoami text (Blackbird-aligned) =====
 const whoamiOutput = `@######(((((((/////((////****************************///////((((((((((((((####@(
 @((((((((((/////////////*******/(##%%##%%%/****************//(((/(((((((((((((((
 @((((//////////////***,,,****/#%%%%&&%#%%%%&&&&%#/**************/////(((((((((((
@@ -107,7 +54,7 @@ const whoamiOutput = `@######(((((((/////((////****************************/////
 @(((//////****//****,,,,*&%%%%%%%%%%%####%%%%#%%&&&&%(**,********////////////(((
 @((/////************,,,/%%%%&####%###((((###(#%%%&&%&&%#,*,************//*////((
 @/////////*******,,,,,,(%&&%##///**/////////(((####%%&%%/,,,,,,,,******///*///((
-@*****//*****,,,,....,*#%&&%#//***********/////(((#%&&&%/,,,,,,,,,*****///////((
+@*****//*****,,,,....,*#%&&%#//***********/////(((#%&&%/,,,,,,,,,*****///////((
 @***********,,,......,(%&&&#(//************/*///((#%%&&%%,....,,,,,******//////(
 @*******,,,,,,,,,...../%&&%(///*************/////(##%&&&&#,...,,.,,,*******/////
 @///**,,,,,,,,,,......,/&&((////**//////*//((#(((###%%&&%%(,..,,,,,,*********///
@@ -133,521 +80,242 @@ const whoamiOutput = `@######(((((((/////((////****************************/////
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##((#&*,(%(###&&&&&&&&@@@@@@@@@@@@@@&@(/((
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&((/&**((/(#((&&&&&&&&&&&&@@@@@@@@@@@@((((
 
-Linkedin - www.linkedin.com/in/robert-lorence-83502818a
+LinkedIn - www.linkedin.com/in/robert-lorence-83502818a
 
-I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering and Business Analytics, and a BA in Economics from Virginia Tech. My background spans hands-on robotics, embedded systems, and large-scale infrastructure. I recently developed sonar-based autonomous navigation platforms in the Brunei rainforest, co-creating the first public bat echolocation dataset for the country. Before that, I spent six years at IBM leading large government and healthcare tech projects, and I've also founded a travel-tech startup and worked on HIL grid testing at Monash University. What excites me about Root Ventures is your belief in backing bold engineering at the frontier, not just funding it, but building alongside it. I'd love to contribute that same mindset to your team.`;
-// Print a line of text to the terminal
-function printLine(text) {
-const line = document.createElement("div");
-line.textContent = text;
-terminal.appendChild(line);
-terminal.scrollTop = terminal.scrollHeight;
+I'm an engineer and entrepreneur with Master's degrees in Electrical Engineering and Business Analytics, and a BA in Economics from Virginia Tech. My background spans hands-on robotics, embedded systems, and large-scale infrastructure. I recently developed sonar-based autonomous navigation platforms in the Brunei rainforest, co-creating the first public bat echolocation dataset for the country. Before that, I spent six years at IBM leading large government and healthcare tech projects, and I've also founded a travel-tech startup and worked on HIL grid testing at Monash University.
+
+I’m focused on building and evaluating frontier systems (robotics, sensing, autonomy) and align with founder-first funds like Blackbird that partner deeply with audacious technical teams.`;
+
+// ===== Print helpers =====
+function printLine(text){ const d=document.createElement("div"); d.textContent=text; terminal.appendChild(d); terminal.scrollTop=terminal.scrollHeight; }
+function printWrapped(text, maxWidth=80){
+  const words=text.split(" "); let line="";
+  for (let i=0;i<words.length;i++){
+    if((line+words[i]).length>maxWidth){ printLine(line); line=""; }
+    line+=words[i]+" ";
+  }
+  if(line.trim().length>0) printLine(line);
 }
 
-// Print wrapped text
-function printWrapped(text, maxWidth = 80) {
-const words = text.split(" ");
-let line = "";
-for (let i = 0; i < words.length; i++) {
-if ((line + words[i]).length > maxWidth) {
-printLine(line);
-line = "";
-}
-line += words[i] + " ";
-}
-if (line.trim().length > 0) printLine(line);
-}
+// ===== Memo viewer =====
+function displayMemo(name){
+  printLine("");
+  switch(name){
 
-// Memo viewer
-function displayMemo(name) {
-printLine("");
-switch (name) {
-case "electroflow":
-printLine("Electroflow Technologies");
-printLine("");
+    // === NEW: Starboard ===
+    case "starboard":
+      printLine("Starboard Maritime Intelligence"); printLine("");
+      printWrapped("Snapshot: Auckland-based maritime domain awareness platform illuminating the global ‘shadow fleet’. Fuses AIS, SAR/EO imagery, RF, and behavioral ML to deliver legally defensible alerts for navies, insurers, traders, and ESG.");
+      printLine("");
+      printWrapped("Why now: Shadow fleet grew ~5x since 2022; ~19% of oil tankers operate dark. Flag-hopping accelerated (avg ~45 days). Cable sabotage and grey-zone activity escalate across the Indo-Pacific and Baltic theatres; NATO expands deterrence (e.g., Baltic Sentry).");
+      printLine("");
+      printWrapped("Tech edge: Multimodal fusion (AIS gaps + SAR wakes + RF + optical hull features) with explainable, confidence-scored outputs. Modules include ‘Cable Sentinel’, ‘Flag-Hop Graphs’, and STS heatmaps. Designed for adversarial/GPS-denied conditions with <10 min alert targets.");
+      printLine("");
+      printWrapped("GTM: Start with insurers/compliance (recurring SaaS), expand to defense tasking; API-first with strategic data contracts. Early ANZ pilots/PoCs.");
+      printLine("");
+      printWrapped("Moat: Labeled event corpora for deception behaviors, sensor/data contracts, regulatory-grade explainability, Indo-Pacific relationships.");
+      printLine("");
+      printWrapped("Risks: Sensor cost economics, attribution liability, dual-use sales friction, competition from incumbents.");
+      printLine("");
+      printWrapped("Comparison to Windward.ai: Windward is the ‘Bloomberg Terminal’ for maritime trade/compliance (breadth, scale). Starboard positions as ‘Palantir for grey-zone security’ (depth under deception, infrastructure protection).");
+      printLine("");
+      printWrapped("Why me: I’ve built multimodal sensing for GPS-denied field robotics (sonar/vision/IMU). I can diligence fusion logic, failure modes, and operational reliability.");
+      break;
 
-// Team
-printWrapped("Team:");
-printWrapped("Electroflow was founded in 2023 by a team with deep technical backgrounds in electrochemistry, chemical process engineering, and battery supply chain operations. The founding team includes former researchers and engineers from top-tier academic labs and energy hardware startups. Currently an 8-person team, they are small but highly technical—appropriate for this stage of electrochemical systems development.");
-printLine("");
+    // === NEW: Carbon280 ===
+    case "carbon280":
+      printLine("Carbon280"); printLine("");
+      printWrapped("Snapshot: Australian DAC startup using modular sorbent capture with mineralization to create permanent, verifiable CO₂ sinks as stable carbonates. Targets distributed, off-grid deployments.");
+      printLine("");
+      printWrapped("Why now: Engineered removals demand rising (1–10 Gt/yr by 2050). Traditional DAC is energy-intensive and geography-bound; Carbon280 emphasizes permanence + flexible siting in ANZ.");
+      printLine("");
+      printWrapped("Tech edge: Solid sorbents on metal hydroxide/silicate substrates; in-situ conversion to carbonates. Passive thermal cycling and waste-heat utilization reduce energy. Leverages mining-tailings supply chains.");
+      printLine("");
+      printWrapped("GTM: High-integrity credits + industrial co-location (cement/steel/mining). Integrates MRV for premium removals; aligns with Australian policy instruments.");
+      printLine("");
+      printWrapped("Moat: Process IP, material formulations, site integration with waste minerals, partnerships with miners/utilities.");
+      printLine("");
+      printWrapped("Risks: Lab-to-field kinetics, MRV standardization, policy dependency, logistics automation.");
+      printLine("");
+      printWrapped("Why me: Hardware/process experience to evaluate pilot design, instrumentation, reliability in remote conditions.");
+      break;
 
-// Overview
-printWrapped("Overview:");
-printWrapped("Electroflow Technologies is developing a modular electrochemical system that directly extracts lithium from dilute brine and converts it into cathode-grade lithium hydroxide. This approach eliminates the need for evaporation ponds or lithium carbonate conversion, streamlining and decarbonizing a traditionally resource- and time-intensive supply chain.");
-printLine("");
+    // === NEW: MCi Carbon ===
+    case "mci":
+      printLine("MCi Carbon (Mineral Carbonation International)"); printLine("");
+      printWrapped("Snapshot: Carbon utilization via mineral carbonation—permanently converts industrial CO₂ into carbon-negative aggregates, fillers, and SCMs. Closes loop between emitter and materials market.");
+      printLine("");
+      printWrapped("Why now: Heavy industry needs Scope 1 abatement options. Utilization creates sellable, low-carbon materials and qualifies for high-integrity credits; Australia has abundant alkaline residues and supportive policy.");
+      printLine("");
+      printWrapped("Tech edge: Continuous-flow reactors combining CO₂ with Ca/Mg silicates → stable carbonates (thermodynamically permanent). Handles impure flue gas; adaptable to varied waste chemistries; potential waste-heat recovery.");
+      printLine("");
+      printWrapped("GTM: Co-locate modules (10k–100k t/yr) at emitters; dual revenue (credits + products). Flagship Newcastle demo with partners (e.g., Orica).");
+      printLine("");
+      printWrapped("Moat: Patented reactor/process know-how, site-specific mineralogy integration, MRV transparency, industrial partnerships.");
+      printLine("");
+      printWrapped("Risks: Scale-up to 100k t/yr modules, product certification across jurisdictions, market education, consistent feedstock chemistry.");
+      printLine("");
+      printWrapped("Why me: HIL, embedded sensing, and process-control background to assess automation, data integrity, and MRV credibility.");
+      break;
 
-// Technology
-printWrapped("Technology:");
-printLine("The company’s platform integrates:");
-printLine("  • Selective electrochemical extraction from brines with minimal reagent and water use.");
-printLine("  • Direct lithium hydroxide production, bypassing intermediate carbonate formation.");
-printLine("  • Modular deployment, enabling smaller-footprint installations near brine sources.");
-printLine("");
-printLine("Recent tests conducted on Mandrake Resources' Utah Lithium Project brines demonstrated:");
-printLine("  • 92% lithium recovery directly from brine.");
-printLine("  • 99.9% pure battery-grade lithium hydroxide product.");
-printLine("  • Zero significant water or chemical consumption.");
-printLine("");
-printLine("Electroflow has been selected, alongside ElectraLith, to participate in pilot programs");
-printLine("for lithium hydroxide production at scale. A pilot plant is planned for construction");
-printLine("at Mandrake’s Utah site in 2024, validating field operability and production economics.");
-printLine("");
-
-// Market
-printWrapped("Market and Timing:");
-printLine("The global lithium market is projected to exceed $20B by 2030,");
-printLine("with demand expected to triple by the end of the decade, driven by EV growth and grid storage.");
-printLine("Current production relies heavily on:");
-printLine("  • Hard rock mining: capital-intensive and geographically concentrated.");
-printLine("  • Brine evaporation: land and time-intensive with low yield efficiency.");
-printLine("");
-printLine("Electroflow’s ability to extract from dilute brines and skip the carbonate conversion step");
-printLine("positions it to undercut incumbent methods on both cost and environmental footprint.");
-printLine("The Utah Paradox Basin project alone targets 1.7M–5.6M tonnes of lithium carbonate equivalent,");
-printLine("suggesting a robust resource pipeline.");
-printLine("");
-
-// Traction
-printWrapped("Traction:");
-printLine("  • Mandrake Partnership: Independent validation of 92% recovery and 99.9% purity; brine selected for pilot plant.");
-printLine("  • Funding: Closed a $2.8M seed round backed by three investors (details not disclosed).");
-printLine("  • Site Visit & Pilot Prep: Site visit in April 2024 confirmed plans to scale production with a field pilot in Utah.");
-printLine("  • Pipeline: Ongoing discussions for additional brine source partnerships and scale-up validation.");
-printLine("");
-
-// Risks
-printWrapped("Risks:");
-printLine("  • Tech scale-up: Electrochemical systems can behave differently at scale; long-term stack performance and membrane fouling must be validated.");
-printLine("  • Execution bandwidth: 8-person team with multiple pilot deployments may face bandwidth issues unless key hires are made.");
-printLine("  • DLE arms race: Competing DLE startups (e.g., Lilac, EnergyX, ElectraLith) are aggressively fundraising and forging offtake partnerships.");
-printLine("");
-
-// Why Root
-printWrapped("Why Root:");
-printLine("Electroflow is an archetypal Root Ventures investment:");
-printLine("  • Technically bold: Reinvents a critical industrial step using electrochemical principles.");
-printLine("  • Hardware-led: Stack design, process control, and modular deployment are core IP.");
-printLine("  • Deep systems thinking: Optimizing for extraction, conversion, and deployment constraints simultaneously.");
-printLine("  • Strategic timing: Entry during a lithium supply crunch with growing institutional and national demand for domestic, clean-sourced lithium.");
-printLine("");
-printLine("Root can add value by helping the team:");
-printLine("  • Navigate pilot design and partner negotiations.");
-printLine("  • Recruit key engineering and operations hires.");
-printLine("  • Structure future funding rounds around offtake and infra milestones.");
-printLine("");
-
-// References
-printWrapped("Reference Links:");
-printLine("  • WSJ: Lithium Startup to Raise More Cash");
-printLine("    https://www.wsj.com/articles/lithium-startup-to-raise-more-cash-for-battery-that-makes-battery-materials-157f08af");
-printLine("  • Mandrake Reports 92% Lithium Recovery with Electroflow");
-printLine("    https://mining.com.au/mandrake-lauds-lithium-recoveries-of-92-at-utah-project/");
-printLine("  • Pitchbook Company Profile");
-printLine("    https://pitchbook.com/profiles/company/594033-58");
-
-break;
-case "kapta":
-printLine("Kapta Space");
-printLine("");
-
-// Team
-printWrapped("Team:");
-printWrapped("Kapta Space was founded in 2023 by Milton Perque (formerly Echodyne) and Adam Bily (formerly Apple and Astranis). The founding team has deep expertise in radar systems, metamaterials, and aerospace engineering. Perque’s background at Echodyne—a leader in metamaterial radar—directly informs the core technical vision. The company now has 8 employees, including senior talent from national defense organizations. Security clearances and DARPA contracting experience position the team to navigate dual-use commercialization and classified defense pathways.");
-printLine("");
-
-// Overview
-printWrapped("Overview:");
-printWrapped("Kapta Space is building spaceborne electronically-steered radar systems using metasurface antennas—ultra-thin, highly programmable materials that shape electromagnetic waves. Unlike traditional AESAs (Active Electronically Steered Arrays), metasurfaces offer smaller, lighter, and more energy-efficient designs, enabling persistent radar sensing in space at a fraction of the cost.");
-printLine("");
-
-// Technology
-printWrapped("Technology:");
-printLine("Kapta’s platform includes:");
-printLine("  • Metasurface radar antennas: Thin, software-defined apertures for beam steering without mechanical components.");
-printLine("  • Synthetic Aperture Radar (SAR) payloads: Enables high-resolution imaging in all conditions.");
-printLine("  • GMTI (Ground Moving Target Indication): Ability to track slow-moving objects from space, long considered infeasible due to latency, cost, and aperture requirements.");
-printLine("  • In-orbit tasking and potential for custody transfer between satellites.");
-printLine("");
-printLine("Kapta’s approach enables a scalable constellation for persistent Earth observation, defense intelligence, and space domain awareness.");
-printLine("");
-
-// Market
-printWrapped("Market:");
-printLine("Kapta operates at the intersection of Earth observation, national security, and space-based sensing. Market drivers include:");
-printLine("  • $12B+ Earth observation and geospatial analytics market.");
-printLine("  • Growing defense demand for space-based radar and tracking infrastructure (GMTI, MDA, SDA).");
-printLine("  • Transition away from vulnerable airborne platforms toward sovereign, orbital radar systems.");
-printLine("");
-printLine("Defense agencies such as DARPA, the NRO, and the U.S. Space Force are actively seeking low-latency, all-weather sensing architectures—precisely what Kapta aims to provide.");
-printLine("");
-
-// Traction
-printWrapped("Traction:");
-printLine("  • $5.38M seed round (2025) led by MetaVC Partners, with backing from Entrada Ventures and Blue Collective.");
-printLine("  • $1.8M SBIR (Direct to Phase II) from DARPA for spaceborne metasurface radar development.");
-printLine("  • In-orbit demo planned with 2–3 satellites to demonstrate persistent GMTI and custody transfer.");
-printLine("  • Secured security clearances and began classified defense engagements.");
-printLine("");
-
-// Risks
-printWrapped("Risks:");
-printLine("  • Technical risk: Metasurfaces in space remain largely unproven, particularly under radiation and thermal stress.");
-printLine("  • Deployment capital: A full constellation will require significant non-dilutive or follow-on capital for launch and operations.");
-printLine("  • Market education: Commercial SAR buyers still lean optical; explaining the GMTI value proposition will require strategic BD and early government traction.");
-printLine("");
-
-// Why Root
-printWrapped("Why Root:");
-printLine("Kapta Space fits Root’s deep-tech thesis across multiple axes:");
-printLine("  • Full-stack hardware/software platform with a clear mission: rewire space-based sensing infrastructure.");
-printLine("  • Technically bold: Metasurface radar in space is a non-incremental leap.");
-printLine("  • Timing: DARPA and DoD interest in GMTI creates a real wedge for dual-use adoption.");
-printLine("  • Team: Root’s experience working with hardware-first, defense-aware founders would accelerate critical inflection points.");
-printLine("");
-printLine("Root could support Kapta in:");
-printLine("  • Navigating dual-use capital strategy (DoD + VC).");
-printLine("  • Recruiting radar and systems engineers for space deployment.");
-printLine("  • Structuring demo milestone financing to bridge to constellation scale.");
-printLine("");
-
-// References
-printWrapped("Reference Links:");
-printLine("  • SpaceNews: https://spacenews.com/kapta-space-unveils-spaceborne-radar-plans");
-printLine("  • Kapta Website: https://www.kaptaspace.com/");
-printLine("  • Pitchbook Profile: https://pitchbook.com/profiles/company/507581-65");
-break;
-case "promise":
-printLine("Promise Bio");
-printLine("");
-
-// Team
-printWrapped("Team:");
-printWrapped("Promise Bio was founded in 2023 by Ronel Veksler (MD/PhD, formerly C2i Genomics), Yifat Merbl (senior scientist at the Weizmann Institute), and Assaf Kacen (CTO). The team blends clinical insight, computational biology, and software engineering. Veksler’s background as a physician and biomedical engineer shaped the company's focus on autoimmune diseases — a space still underserved by AI-driven precision medicine. They currently have a 9-person team based in Tel Aviv, with ongoing collaborations across the U.S. and Israel.");
-printLine("");
-
-// Overview
-printWrapped("Overview:");
-printWrapped("Promise Bio is building a post-translational proteomics platform to transform autoimmune disease diagnostics and therapy. While most platforms today focus on DNA or RNA, Promise targets proteins—specifically, Post-Translational Modifications (PTMs), of which there are over 200 types. PTMs fundamentally alter protein function, yet existing methods can only assay a few at a time.");
-printLine("");
-printWrapped("Promise's platform enables single-sample, high-throughput PTM detection using AI and proprietary cloud-based inference tools. This creates a molecular 'fingerprint' of disease state, enabling precision diagnosis and more accurate drug targeting in conditions like lupus, rheumatoid arthritis, and multiple sclerosis.");
-printLine("");
-
-// Technology
-printWrapped("Technology:");
-printLine("Promise Bio combines:");
-printLine("  • Proprietary PTM-capture and tagging protocols, enabling detection of hundreds of protein modifications in parallel.");
-printLine("  • A cloud-based AI platform to interpret PTM patterns as disease biomarkers.");
-printLine("  • A growing database of annotated PTM data across clinical cohorts.");
-printLine("");
-printLine("Unlike traditional omics platforms, Promise focuses on functional proteomics—allowing clinicians to see not just what proteins are present, but what they’re doing in real time.");
-printLine("");
-
-// Market
-printWrapped("Market:");
-printLine("Autoimmune disorders affect ~4% of the global population (~320M people), yet precision medicine approaches have lagged behind oncology due to a lack of actionable biomarkers.");
-printLine("Promise Bio opens new therapeutic and diagnostic frontiers by:");
-printLine("  • Allowing better patient stratification in drug trials.");
-printLine("  • Enabling dynamic monitoring of immune response.");
-printLine("  • Reducing the diagnostic cycle from years to weeks.");
-printLine("");
-printLine("The addressable market spans diagnostics (>$20B), autoimmune drug development, and clinical trial optimization.");
-printLine("");
-
-// Traction
-printWrapped("Traction:");
-printLine("  • Raised $8.3M seed round (2023), led by Awz Ventures with participation from AstraZeneca and Pfizer.");
-printLine("  • Collaborations with major hospitals in Israel and the U.S.");
-printLine("  • Active partnerships with pharma leaders (AstraZeneca, Pfizer) for biomarker discovery and trial design.");
-printLine("  • Strong inbound interest from researchers in neurodegenerative and inflammatory disease verticals.");
-printLine("");
-
-// Risks
-printWrapped("Risks:");
-printLine("  • Platform reproducibility: Functional proteomics is noisy; reproducibility across labs and conditions must be validated.");
-printLine("  • Clinical integration: PTM biomarker interpretation is novel - regulatory and clinical adoption will require substantial education and validation.");
-printLine("  • Market framing: Distinguishing Promise from generic 'AI drug discovery' startups is crucial to avoid investor fatigue.");
-printLine("");
-
-// Why Root
-printWrapped("Why Root:");
-printLine("Promise Bio fits Root’s investment thesis in science-as-infrastructure:");
-printLine("  • Builds tooling at the molecular layer, not just another AI wrapper.");
-printLine("  • Tackles a neglected problem space (autoimmune precision medicine) with bold new data types.");
-printLine("  • Core moat lies in proprietary data generation and interpretation — not easily copied by incumbent bio players.");
-printLine("");
-printLine("Root’s support could add value by:");
-printLine("  • Helping frame a narrative around functional proteomics for tech-forward pharma VCs.");
-printLine("  • Advising on go-to-market strategies that bridge research tools and clinical endpoints.");
-printLine("  • Recruiting experienced translational bioengineers and enterprise BD talent.");
-printLine("");
-
-// References
-printWrapped("Reference Links:");
-printLine("  • TechCrunch: https://techcrunch.com/2024/06/18/promise-bio-raises-seed-to-rethink-autoimmune-diagnostics");
-printLine("  • Promise Bio Website: https://promise.bio/");
-printLine("  • Pitchbook Profile: https://pitchbook.com/profiles/company/522088-12");
-break;
-
-case "radix":
-printLine("Radix Motion");
-printLine("");
-
-// Overview
-printWrapped("Overview:");
-printWrapped("Radix Motion is developing MEU, an asynchronous 3D communication platform that transmits body movements as a form of self-expression. Built at the intersection of cognitive neuroscience, immersive tech, and embodiment theory, MEU allows users to send dances, hugs, and gestures enhanced with audio-visual filters. The goal is to shift digital communication from emojis and text toward embodied, sensory-rich interaction—particularly in AR/VR environments.");
-printLine("");
-
-// Team
-printWrapped("Team:");
-printWrapped("CEO Sarah Hashkes holds a master’s in cognitive neuroscience and has conducted research on predictive coding, psychedelics, and the brain-body link. She co-founded Radix Motion with CTO Matthew Hoe in 2019, driven by the idea that emotional presence can be transmitted through motion—not just speech. The team’s approach is informed by martial arts, movement science, and immersive tech design. Hashkes also advocates for women in XR and openly documents the challenges she has faced securing funding and respect as a female technical founder.");
-printLine("");
-
-// Technology
-printWrapped("Technology:");
-printLine("MEU is built using Unity and leverages standard XR motion capture frameworks (e.g., ARKit, SteamVR) to:");
-printLine("  • Capture 3D motion data from headsets and mobile sensors.");
-printLine("  • Encode gestures, dances, and body language asynchronously.");
-printLine("  • Apply immersive filters to create 'psychedelic' communication experiences.");
-printLine("  • Support distribution via Steam, Rift, SideQuest, and mobile platforms.");
-printLine("");
-printLine("Radix emphasizes body-centric user interaction over standard input metaphors, pushing XR beyond screens and menus.");
-printLine("");
-
-// Market
-printWrapped("Market:");
-printLine("Radix targets the intersection of:");
-printLine("  • XR wellness and mental health tools.");
-printLine("  • Emotionally intelligent social media.");
-printLine("  • Adult content, with a secondary focus on consent-based embodied experiences.");
-printLine("");
-printLine("However, the XR communication market is still emerging, with unclear monetization, fragmented platforms, and a lack of dominant hardware adoption. Without a killer use case, MEU risks being perceived as an art piece rather than infrastructure.");
-printLine("");
-
-// Traction
-printWrapped("Traction:");
-printLine("  • Raised ~$60K via equity crowdfunding (Wefunder) in 2021.");
-printLine("  • MEU is live on multiple VR storefronts with niche adoption.");
-printLine("  • Hashkes has built a strong personal brand in the XR and neurotech communities.");
-printLine("  • Contributed to projects like EmpowHER (self-defense training) and consent-first adult VR content.");
-printLine("");
-printLine("Notably, Radix has not yet closed a major institutional seed round or demonstrated consistent usage or monetization metrics.");
-printLine("");
-
-// Risks
-printWrapped("Risks:");
-printLine("  • Lack of technical moat: Built on standard XR SDKs; no proprietary hardware or ML stack.");
-printLine("  • Market readiness: Embodied asynchronous communication is novel but lacks broad user demand.");
-printLine("  • Ecosystem volatility: Relies heavily on XR platform growth and content discoverability.");
-printLine("  • Monetization: No clear path to revenue or enterprise adoption.");
-printLine("");
-
-// Why We're Passing
-printWrapped("Why We're Passing:");
-printLine("Radix Motion is an intellectually rich and emotionally compelling project, but does not currently align with Root’s investment thesis:");
-printLine("  • Low defensibility: Without hardware IP or novel software infrastructure, the platform is hard to protect.");
-printLine("  • Narrow market pull: Embodied messaging lacks urgency compared to pressing problems in bio, industrial automation, or deep computing.");
-printLine("  • Stage: With no major traction or strategic partnerships, the project still feels like an early experimental sandbox.");
-printLine("");
-
-// Conclusion
-printWrapped("Conclusion:");
-printLine("Radix is a brave and creative exploration of how technology might reconnect us with our bodies. While it may inspire future interface paradigms, it remains too speculative and undercapitalized to fit Root’s focus on deeply engineered platforms tackling urgent, infrastructure-scale problems.");
-printLine("");
-
-// References
-printWrapped("References:");
-printLine("  • Radix Motion: https://radixmotion.com/");
-printLine("  • Wefunder: https://wefunder.com/radixmotion");
-printLine("  • Women in XR Interview: https://www.awexr.com/blog/259-women-making-history-meet-sarah-hashkes-radix-moti");
-printLine("  • Voices of VR #780: https://voicesofvr.com/780-psychedelic-embodiment-vr-radix-motion/");
-break;
-
-}
-printLine("Use 'next', 'prev', or 'exit' to navigate memos.");
+  }
+  printLine("Use 'next', 'prev', or 'exit' to navigate memos.");
 }
 
-function runCommand(command) {
-printLine(prompt + command);
-const args = command.split(" ");
-const base = args[0].toLowerCase();
-const param = args[1]?.toLowerCase();
+// ===== Command router =====
+function runCommand(command){
+  printLine(prompt + command);
+  const args = command.split(" ");
+  const base = args[0].toLowerCase();
+  const param = args[1]?.toLowerCase();
 
-if (memoMode) {
-switch (base) {
-case "next":
-if (currentMemoIndex < memos.length - 1) {
-currentMemoIndex++;
-displayMemo(memos[currentMemoIndex]);
-} else {
-printLine("You're already at the last memo.");
-}
-return;
-case "prev":
-if (currentMemoIndex > 0) {
-currentMemoIndex--;
-displayMemo(memos[currentMemoIndex]);
-} else {
-printLine("You're already at the first memo.");
-}
-return;
-case "exit":
-memoMode = false;
-currentMemoIndex = -1;
-printLine("Exited memo viewer.");
-return;
-default:
-printLine("You're in memo viewer mode. Use 'next', 'prev', or 'exit'.");
-return;
-}
+  if (memoMode){
+    switch(base){
+      case "next":
+        if(currentMemoIndex < memos.length-1){ currentMemoIndex++; displayMemo(memos[currentMemoIndex]); }
+        else { printLine("You're already at the last memo."); }
+        return;
+      case "prev":
+        if(currentMemoIndex > 0){ currentMemoIndex--; displayMemo(memos[currentMemoIndex]); }
+        else { printLine("You're already at the first memo."); }
+        return;
+      case "exit":
+        memoMode=false; currentMemoIndex=-1; printLine("Exited memo viewer."); return;
+      default:
+        printLine("You're in memo viewer mode. Use 'next', 'prev', or 'exit'."); return;
+    }
+  }
+
+  switch(base){
+    case "help":
+      printLine("Available commands:");
+      printLine("  whoami              - Learn more about me");
+      printLine("  launch              - View some random startup ideas");
+      printLine("  download            - Download my CV");
+      printLine("  download dossier    - Download my ANZ cases PDF");
+      printLine("  git this repo       - View the project repository");
+      printLine("  base64              - View a base64-encoded snippet of my CV");
+      printLine("  history             - Show previous commands");
+      printLine("  clear               - Clear the terminal");
+      printLine("  cases anz           - List ANZ case analyses");
+      printLine("  analysis [name]     - View a specific memo (e.g., analysis starboard)");
+      break;
+
+    case "whoami":
+      printLine(whoamiOutput); break;
+
+    case "sudo":
+      if (args[1] === "blackbird"){
+        printLine("Requesting elevated access...");
+        setTimeout(()=>{ printLine("Access granted. Welcome, Blackbird."); }, 600);
+      } else { printLine("sudo: permission denied."); }
+      break;
+
+    case "launch":
+      printLine("🚀 Launching pitch generator...\n");
+      const shuffled = startupIdeas.sort(() => 0.5 - Math.random()).slice(0,2);
+      shuffled.forEach(idea=>{
+        printLine("────────────────────────────────────────────");
+        printWrapped(`${idea.name}`);
+        printWrapped(`Tagline: "${idea.tagline}"`);
+        printLine(""); printWrapped(idea.description);
+        printLine("────────────────────────────────────────────\n");
+      });
+      break;
+
+    case "download":
+      printLine("📎 Download my CV here:");
+      printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
+      break;
+
+    case "download":
+    case "download dossier":
+      printLine("📎 Download my ANZ cases dossier here:");
+      printLine("https://bluerl27.github.io/cases/Robert_Lorence_Investment_Analyses.pdf"); // <-- update this path after you upload
+      break;
+
+    case "git":
+    case "git this repo":
+      printLine("📁 Clone or view the repository here:");
+      printLine("https://github.com/bluerl27/robertlorence.github.io");
+      break;
+
+    case "base64":
+      printLine("Here's a Base64 preview of my CV (simulated):");
+      printLine("JVBERi0xLjQKJcTl8uXrp... (truncated)");
+      break;
+
+    case "clear":
+      terminal.innerHTML = ""; break;
+
+    case "history":
+      if (commandHistory.length===0){ printLine("No previous commands."); }
+      else { commandHistory.slice().reverse().forEach((cmd,i)=>printLine(`${i+1}: ${cmd}`)); }
+      break;
+
+    case "cases":
+      if (param === "anz"){
+        printLine("ANZ cases available:");
+        printLine("  - starboard   (maritime domain awareness / grey-zone security)");
+        printLine("  - carbon280   (modular DAC + mineralization)");
+        printLine("  - mci         (mineral carbonation / carbon-negative materials)");
+        printLine("Use: analysis [name]");
+      } else {
+        printLine("Usage: cases anz");
+      }
+      break;
+
+    case "analysis":
+      if (!param){
+        printLine("Analyses available:");
+        memos.forEach(m => printLine(`  - ${m}`));
+        printLine("Type 'analysis [name]' to view a specific memo.");
+      } else if (memos.includes(param)){
+        currentMemoIndex = memos.indexOf(param);
+        memoMode = true;
+        displayMemo(param);
+      } else {
+        printLine("Memo not recognized. Try: starboard, carbon280, mci, electroflow, kapta, promise, radix.");
+      }
+      break;
+
+    default:
+      printLine("Command not found. Type 'help' for a list of commands.");
+  }
 }
 
-switch (base) {
-case "help":
-printLine("Available commands:");
-printLine("  whoami         - Learn more about me");
-printLine("  launch         - View some random startup ideas");
-printLine("  download       - Download my CV");
-printLine("  git this repo  - View the project repository");
-printLine("  base64         - View a base64-encoded snippet of my CV");
-printLine("  history        - Show previous commands");
-printLine("  clear          - Clear the terminal");
-printLine("  analysis       - View memos on Root-aligned companies");
-break;
-case "whoami":
-printLine(whoamiOutput);
-break;
-case "sudo":
-if (args[1] === "root") {
-printLine("Requesting elevated access...");
-setTimeout(() => {
-        printLine("Access granted. Welcome, Root Ventures.");
-}, 600);
-} else {
-printLine("sudo: permission denied.");
-}
-break;
-case "launch":
-  printLine("🚀 Launching pitch generator...\n");
-  const shuffled = startupIdeas.sort(() => 0.5 - Math.random()).slice(0, 2);
-  shuffled.forEach(idea => {
-    printLine("────────────────────────────────────────────");
-    printWrapped(`${idea.name}`);
-    printWrapped(`Tagline: "${idea.tagline}"`);
-    printLine("");
-    printWrapped(idea.description);
-    printLine("────────────────────────────────────────────\n");
+function createInputLine(){
+  const inputLine=document.createElement("div"); inputLine.className="input-line";
+  const promptSpan=document.createElement("span"); promptSpan.className="prompt"; promptSpan.textContent=prompt; inputLine.appendChild(promptSpan);
+  const terminalInput=document.createElement("span"); terminalInput.className="terminal-input"; terminalInput.contentEditable=true; inputLine.appendChild(terminalInput);
+  const cursor=document.createElement("span"); cursor.className="blinking-box"; inputLine.appendChild(cursor);
+  terminal.appendChild(inputLine); terminalInput.focus();
+
+  terminalInput.addEventListener("keydown", e=>{
+    if(e.key==="Enter"){
+      e.preventDefault();
+      const value=terminalInput.textContent.trim();
+      commandHistory.unshift(value); historyIndex=-1; inputLine.remove(); runCommand(value); createInputLine();
+    } else if (e.key==="ArrowUp"){
+      if(commandHistory.length>0){ historyIndex=Math.min(historyIndex+1, commandHistory.length-1); terminalInput.textContent=commandHistory[historyIndex]; }
+    } else if (e.key==="ArrowDown"){
+      if(historyIndex>0){ historyIndex--; terminalInput.textContent=commandHistory[historyIndex]; } else { terminalInput.textContent=""; }
+    } else if (e.key==="Tab"){
+      e.preventDefault();
+      const currentText=terminalInput.textContent.trim().toLowerCase();
+      const matches=availableCommands.filter(cmd=>cmd.startsWith(currentText));
+      if(matches.length===1){ terminalInput.textContent=matches[0]; }
+      else if(matches.length>1){
+        printLine(prompt+currentText); printLine("Possible matches:"); matches.forEach(match=>printLine("  "+match)); createInputLine();
+      }
+    }
   });
-  break;
-case "download":
-printLine("📎 Download my CV here:");
-printLine("https://bluerl27.github.io/cv/Robert_Lorence_CV_2025.pdf");
-break;
-case "git":
-case "git this repo":
-printLine("📁 Clone or view the repository here:");
-printLine("https://github.com/bluerl27/robertlorence.github.io");
-break;
-case "base64":
-printLine("Here's a Base64 preview of my CV (simulated):");
-printLine("JVBERi0xLjQKJcTl8uXrp... (truncated)");
-break;
-case "clear":
-terminal.innerHTML = "";
-break;
-case "history":
-if (commandHistory.length === 0) {
-printLine("No previous commands.");
-} else {
-commandHistory.slice().reverse().forEach((cmd, i) => {
-printLine(`${i + 1}: ${cmd}`);
-});
-}
-break;
-case "analysis":
-if (!param) {
-printLine("Analysis available for:");
-memos.forEach(m => printLine(`  - ${m}`));
-printLine("Type 'analysis [company]' to view a specific memo.");
-} else if (memos.includes(param)) {
-currentMemoIndex = memos.indexOf(param);
-memoMode = true;
-displayMemo(param);
-} else {
-printLine("Company not recognized. Try: electroflow, kapta, promise, or radix.");
-}
-break;
-default:
-printLine("Command not found. Type 'help' for a list of commands.");
-}
 }
 
-function createInputLine() {
-const inputLine = document.createElement("div");
-inputLine.className = "input-line";
-
-const promptSpan = document.createElement("span");
-promptSpan.className = "prompt";
-promptSpan.textContent = prompt;
-inputLine.appendChild(promptSpan);
-
-const terminalInput = document.createElement("span");
-terminalInput.className = "terminal-input";
-terminalInput.contentEditable = true;
-inputLine.appendChild(terminalInput);
-
-const cursor = document.createElement("span");
-cursor.className = "blinking-box";
-inputLine.appendChild(cursor);
-
-terminal.appendChild(inputLine);
-terminalInput.focus();
-
-terminalInput.addEventListener("keydown", e => {
-if (e.key === "Enter") {
-e.preventDefault();
-const value = terminalInput.textContent.trim();
-commandHistory.unshift(value);
-historyIndex = -1;
-inputLine.remove();
-runCommand(value);
-createInputLine();
-} else if (e.key === "ArrowUp") {
-if (commandHistory.length > 0) {
-historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
-terminalInput.textContent = commandHistory[historyIndex];
-}
-} else if (e.key === "ArrowDown") {
-if (historyIndex > 0) {
-historyIndex--;
-terminalInput.textContent = commandHistory[historyIndex];
-} else {
-terminalInput.textContent = "";
-}
-} else if (e.key === "Tab") {
-e.preventDefault();
-const currentText = terminalInput.textContent.trim().toLowerCase();
-const matches = availableCommands.filter(cmd => cmd.startsWith(currentText));
-
-if (matches.length === 1) {
-terminalInput.textContent = matches[0];
-} else if (matches.length > 1) {
-printLine(prompt + currentText);
-printLine("Possible matches:");
-matches.forEach(match => printLine("  " + match));
-createInputLine();
-}
-}
-});
-}
-
-if (window.location.search.includes("root=true")) {
-printLine("Welcome, and thank you for your time and consideration.");
-}
-
-printLine("Welcome to the terminal resume of Robert Lorence, hosted at bluerl27.github.io.");
+// ===== Intro =====
+printLine("Welcome to the terminal resume of Robert Lorence (bluerl27.github.io).");
 printLine("Type 'help' to get started.");
 createInputLine();
-
 </script>
 </body>
 </html>
